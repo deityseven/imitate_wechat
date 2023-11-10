@@ -1,0 +1,2 @@
+ADD_SUBDIRECTORY(config_parser)
+ADD_SUBDIRECTORY(test)
