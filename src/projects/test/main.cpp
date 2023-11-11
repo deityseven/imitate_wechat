@@ -6,6 +6,8 @@ int main(int argc, char *argv[])
 {
 	std::cout << ConfigParser::test();
 
+	std::cout << "change..." << std::endl;
+
 	return 0;
 }
 
