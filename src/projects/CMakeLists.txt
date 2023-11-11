@@ -1,2 +1,2 @@
-ADD_SUBDIRECTORY(config_parser)
+ADD_SUBDIRECTORY(common)
 ADD_SUBDIRECTORY(test)
