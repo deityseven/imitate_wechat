@@ -4,17 +4,24 @@ project(common)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(UTIL_SRC
+set(CONFIG_SRC
 	config_parser.h
 	config_parser.cpp
 )
 
+set(FILE_SRC
+	file_util.h
+	file_util.cpp
+)
+
 set(SRCS
-	${UTIL_SRC}
+	${CONFIG_SRC}
+	${FILE_SRC}
 )
 
 #筛选显示
-source_group(util FILES ${UTIL_SRC})
+source_group(config FILES ${CONFIG_SRC})
+source_group(file FILES ${FILE_SRC})
 
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
