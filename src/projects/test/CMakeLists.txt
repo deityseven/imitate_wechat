@@ -36,7 +36,7 @@ endif(WIN32)
 
 #链接静态库
 link_libraries(
-	config_parser
+	common
 )
 
 if(WIN32)
