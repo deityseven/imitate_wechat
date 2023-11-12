@@ -4,9 +4,27 @@ project(common)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(PLATFORM_SRC
+    platform_define.h
+    platform_util.h
+    platform_util.cpp
+)
+
+set(COMMON_SRC
+	type_struct.h
+    data.h
+    data.cpp
+)
+
 set(CONFIG_SRC
 	config_parser.h
 	config_parser.cpp
+
+    configfile.h
+    configfile.cpp
+
+    ini_config.h
+    ini_config.cpp
 )
 
 set(FILE_SRC
@@ -14,12 +32,23 @@ set(FILE_SRC
 	file_util.cpp
 )
 
+set(STRING_SRC
+	string_util.h
+	string_util.cpp
+)
+
 set(SRCS
+	${STRING_SRC}
+	${PLATFORM_SRC}
+	${COMMON_SRC}
 	${CONFIG_SRC}
 	${FILE_SRC}
 )
 
 #筛选显示
+source_group(string FILES ${STRING_SRC})
+source_group(platform FILES ${PLATFORM_SRC})
+source_group(common FILES ${COMMON_SRC})
 source_group(config FILES ${CONFIG_SRC})
 source_group(file FILES ${FILE_SRC})
 
