@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 
     ConfigFile* ic = new IniConfig("./configs/system.ini");
 
+	delete ic;
 
 	return 0;
 }

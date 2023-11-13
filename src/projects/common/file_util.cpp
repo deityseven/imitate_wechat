@@ -1,5 +1,5 @@
 #include "file_util.h"
-
+#include "platform_util.h"
 #include <fstream>
 
 std::string FileUtil::readAllText(const std::string & filePath)
@@ -25,13 +25,14 @@ bool FileUtil::canWrite(const std::string & filePath)
         fs.close();
         return true;
     }
-    
-    if (PlatformUtil::fileAccess(filePath.c_str(), PlatformUtil::FileAuthority::file_exist) == 0)
+    */
+
+    if (PlatformUtil::access(filePath.c_str(), PlatformUtil::FileAuthority::file_exist))
     {
-        if (PlatformUtil::fileAccess(filePath.c_str(), PlatformUtil::FileAuthority::can_write) == 0)
+        if (PlatformUtil::access(filePath.c_str(), PlatformUtil::FileAuthority::can_write))
             return true;
     }
-    */
+
     return false;
 }
 

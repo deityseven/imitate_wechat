@@ -14,12 +14,12 @@ public:
     Data(long data);
     Data(bool data);
 
-    std::string toString();
-    int toInt();
-    float toFloat();
-    double toDouble();
-    long toLong();
-    bool toBool();
+    std::string toString() const;
+    int toInt() const;
+    float toFloat() const;
+    double toDouble() const;
+    long toLong() const;
+    bool toBool() const;
 
     ~Data() = default;
 

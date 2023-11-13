@@ -33,32 +33,32 @@ Data::Data(bool data)
         this->data.swap(std::string("false"));
 }
 
-std::string Data::toString()
+std::string Data::toString() const
 {
     return this->data;
 }
 
-int Data::toInt()
+int Data::toInt() const
 {
     return std::move(std::stoi(this->data.c_str()));
 }
 
-float Data::toFloat()
+float Data::toFloat() const
 {
     return std::move(std::stof(this->data.c_str()));
 }
 
-double Data::toDouble()
+double Data::toDouble() const
 {
     return std::move(std::stod(this->data));
 }
 
-long Data::toLong()
+long Data::toLong() const
 {
     return std::move(std::stol(this->data.c_str()));
 }
 
-bool Data::toBool()
+bool Data::toBool() const
 {
     return this->data == "true";
 }

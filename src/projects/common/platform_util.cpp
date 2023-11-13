@@ -9,7 +9,14 @@
 #include <unistd.h>
 #endif // I_OS_LINUX
 
-int PlatformUtil::fileAccess(const char * filename, FileAuthority mode)
+bool PlatformUtil::access(const char * filename, FileAuthority mode)
 {
-    return access(filename, (int)mode);
+#ifdef I_OS_WIN
+    return ::_access(filename, (int)mode) == 0;
+#endif // I_OS_WIN
+
+#ifdef I_OS_LINUX
+#include <unistd.h>
+    return ::access(filename, (int)mode) == 0;
+#endif // I_OS_LINUX
 }

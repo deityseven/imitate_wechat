@@ -1,6 +1,6 @@
 #include "configfile.h"
 #include "file_util.h"
-#include <io.h>
+#include <stdexcept>
 
 inline void ConfigFile::beginSection(std::string section)
 {
@@ -25,9 +25,8 @@ inline Data ConfigFile::value(std::string key) const
 
         return keyValueMap.at(key);
     }
-    catch (std::out_of_range& e)
+    catch (...)
     {
-        e.what();
         return Data();
     }
 }
@@ -40,7 +39,7 @@ inline void ConfigFile::setValue(std::string key, Data data)
 
         keyValueMap[key] = data;
     }
-    catch (std::out_of_range& e)
+    catch (...)
     {
 
     }
@@ -59,7 +58,7 @@ inline StringList ConfigFile::allKeys() const
             list.push_back(pair.first);
         }
     }
-    catch (std::out_of_range& e)
+    catch (...)
     {
         return list;
     }
@@ -75,7 +74,7 @@ inline bool ConfigFile::hasKey(std::string key) const
 
         return iter != keyValueMap.end();
     }
-    catch (std::out_of_range& e)
+    catch (...)
     {
         return false;
     }
@@ -94,7 +93,7 @@ bool ConfigFile::deleteKey(std::string key)
 
         return true;
     }
-    catch (std::out_of_range& e)
+    catch (...)
     {
         return false;
     }
@@ -128,13 +127,16 @@ std::string ConfigFile::filePath() const
 }
 
 ConfigFile::ConfigFile(std::string filePath)
-    :currentSection("default")
+    :currentSection("default"),
+    formatData(ConfigFile::Format::none), 
+    isWritableData(false),
+    filePathData(filePath)
 {
-    this->filePathData.swap(filePath);
 }
 
 ConfigFile::~ConfigFile()
 {
+    clear();
 }
 
 std::string ConfigFile::readFile(const std::string& filePath) const

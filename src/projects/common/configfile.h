@@ -50,7 +50,7 @@ public:
     std::string filePath() const;
 
     ConfigFile(std::string filePath);
-    ~ConfigFile();
+    virtual ~ConfigFile();
 
 protected:
     //解析文件过程
@@ -60,9 +60,9 @@ protected:
     //设置文件格式
     void setFormat(Format format);
     //解析文件内容至data中
-    virtual void parseContent(const std::string& fileContent, std::map<std::string, std::map<std::string, Data>>& data) = 0;
+    virtual void parseContent(const std::string& fileContent, ConfigData& data) = 0;
     //从data中构建配置文件内容
-    virtual std::string&& buildFileContent(const std::map<std::string, std::map<std::string, Data>>& data) const = 0;
+    virtual std::string buildFileContent(const ConfigData& data) const = 0;
 private:
     //设置文件是否可写
     void setWritable(bool isWritable);
@@ -70,7 +70,7 @@ private:
     std::string readFile(const std::string& filePath) const;
 private:
     //       section               key          value
-	std::map<std::string, std::map<std::string, Data>> data;
+    ConfigData data;
     //配置文件路径
     std::string filePathData;
     //文件格式
