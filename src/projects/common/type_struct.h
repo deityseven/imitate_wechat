@@ -9,4 +9,11 @@
 typedef std::list<std::string> StringList;
 typedef std::map<std::string, std::map<std::string, Data>> ConfigData;
 
+enum class ConfigFileType
+{
+    Ini,
+    Json,
+    Xml
+};
+
 #endif // !TYPE_STRUCT_H

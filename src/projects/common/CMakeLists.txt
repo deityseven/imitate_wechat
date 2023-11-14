@@ -26,7 +26,13 @@ set(CONFIG_SRC
     ini_config.h
     ini_config.cpp
 
+    config_file_content_parser_handle.h
+    config_file_content_parser_handle.cpp
+    ini_parser_handle.h
+    ini_parser_handle.cpp
+
 	config_file_content_parser.h
+	config_file_content_parser.cpp
 )
 
 set(FILE_SRC
