@@ -17,9 +17,6 @@ set(COMMON_SRC
 )
 
 set(CONFIG_SRC
-	config_parser.h
-	config_parser.cpp
-
     configfile.h
     configfile.cpp
 
