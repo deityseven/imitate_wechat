@@ -1,6 +1,7 @@
 #ifndef INI_CONFIG_H
 #define INI_CONFIG_H
 
+/*
 #include "configfile.h"
 #include "type_struct.h"
 
@@ -15,5 +16,5 @@ protected:
     virtual void parseContent(const std::string & fileContent, ConfigData& data) override;
     virtual std::string buildFileContent(const ConfigData& data) const override;
 };
-
+*/
 #endif // !INI_CONFIG_H

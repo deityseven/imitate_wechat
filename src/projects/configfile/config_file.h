@@ -5,8 +5,8 @@
 #include <list>
 #include <map>
 
-#include "type_struct.h"
-#include "data.h"
+#include <type_struct.h>
+#include <data.h>
 
 //配置文件抽象
 class ConfigFile
@@ -59,8 +59,6 @@ protected:
     void outputFile();
     //设置文件格式
     void setFormat(Format format);
-    //解析文件内容至data中
-    virtual void parseContent(const std::string& fileContent, ConfigData& data) = 0;
     //从data中构建配置文件内容
     virtual std::string buildFileContent(const ConfigData& data) const = 0;
 private:

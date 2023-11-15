@@ -2,7 +2,7 @@
 #define FILE_UTIL_H
 
 #include <string>
-#include "type_struct.h"
+#include <type_struct.h>
 
 //文件相关操作
 class FileUtil

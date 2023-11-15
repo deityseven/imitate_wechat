@@ -1,6 +1,7 @@
-#include "configfile.h"
-#include "file_util.h"
+#include "config_file.h"
+#include <file_util.h>
 #include <stdexcept>
+#include "./configfile/parser/config_file_content_parser.h"
 
 inline void ConfigFile::beginSection(std::string section)
 {
@@ -149,7 +150,8 @@ void ConfigFile::parseFile()
     bool isWritable = FileUtil::canWrite(this->filePathData);
     setWritable(isWritable);
     auto fileContent = readFile(this->filePathData);
-    parseContent(fileContent, this->data);
+    
+    ConfigFileContentParser::instance().parseContent(fileContent, this->data);
 }
 
 void ConfigFile::outputFile()

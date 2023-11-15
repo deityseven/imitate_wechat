@@ -6,6 +6,8 @@
 
 class ConfigFileContentParserHandle
 {
+    friend class ConfigFileContentParserHandleBuilder;
+
 public:
     bool execute(const std::string& configFileContent, const ConfigFileType& type, ConfigData& out);
 
