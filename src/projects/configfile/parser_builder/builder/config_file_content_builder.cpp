@@ -1,19 +1,16 @@
-#include "config_file_content_parser.h"
-#include "config_file_content_parser_handle.h"
-#include "config_file_content_parser_handle_builder.h"
-#include "file_util.h"
+#include "config_file_content_builder.h"
+#include "config_file_content_builder_handle.h"
+#include "config_file_content_builder_handle_builder.h"
 
-ConfigFileContentParser::ConfigFileContentParser()
-    :handleHead(ConfigFileContentParserHandleBuilder::build())
+std::string ConfigFileContentBuilder::buildFileContent(const ConfigData& data, const ConfigFileType& type)
 {
+    std::string content;
+    handleHead->execute(content, type, data);
+
+    return std::move(content);
 }
 
-void ConfigFileContentParser::parseContent(const std::string & fileContent, ConfigData & data)
+ConfigFileContentBuilder::ConfigFileContentBuilder()
+    :handleHead(ConfigFileContentBuilderHandleBuilder::build())
 {
-    //type
-    ConfigFileType type = FileUtil::fileContentFormat(fileContent);
-
-    //handle
-    handleHead->execute(fileContent, type, data);
 }
-

@@ -13,6 +13,8 @@ set(PARSER_SRC
 	./parser_builder/parser/config_file_content_parser.cpp
     ./parser_builder/parser/ini_parser_handle.h
     ./parser_builder/parser/ini_parser_handle.cpp
+    ./parser_builder/parser/json_parser_handle.h
+    ./parser_builder/parser/json_parser_handle.cpp
 )
 
 set(BUILDER_SRC
@@ -24,6 +26,8 @@ set(BUILDER_SRC
 	./parser_builder/builder/config_file_content_builder.cpp
     ./parser_builder/builder/ini_builder_handle.h
     ./parser_builder/builder/ini_builder_handle.cpp
+    ./parser_builder/builder/json_builder_handle.h
+    ./parser_builder/builder/json_builder_handle.cpp
 )
 
 set(CONFIG_SRC
@@ -44,6 +48,7 @@ source_group(builder FILES ${BUILDER_SRC})
 
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
+					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/src/projects/common
 					${CMAKE_SOURCE_DIR}/src/projects/util
 )

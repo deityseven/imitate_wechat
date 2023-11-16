@@ -8,11 +8,8 @@ ConfigFileContentParser::ConfigFileContentParser()
 {
 }
 
-void ConfigFileContentParser::parseContent(const std::string & fileContent, ConfigData & data)
+void ConfigFileContentParser::parseContent(const std::string & fileContent, const ConfigFileType& type, ConfigData& data)
 {
-    //type
-    ConfigFileType type = FileUtil::fileContentFormat(fileContent);
-
     //handle
     handleHead->execute(fileContent, type, data);
 }

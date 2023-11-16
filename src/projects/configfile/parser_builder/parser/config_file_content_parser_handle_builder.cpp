@@ -4,7 +4,7 @@
 ConfigFileContentParserHandle * ConfigFileContentParserHandleBuilder::build()
 {
     ConfigFileContentParserHandle* head = new IniParserHandle;
-    head->next == nullptr;
+    head->next = nullptr;
 
     return head;
 }

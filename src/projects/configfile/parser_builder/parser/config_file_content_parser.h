@@ -16,7 +16,7 @@ public:
         return ins;
     }
 
-    void parseContent(const std::string & fileContent, ConfigData& data);
+    void parseContent(const std::string & fileContent, const ConfigFileType& type, ConfigData& data);
 
 private:
     ConfigFileContentParser();

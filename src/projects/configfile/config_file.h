@@ -12,15 +12,8 @@
 class ConfigFile
 {
 public:
-
-    //配置文件格式
-    enum Format
-    {
-        none,
-        ini,
-        json,
-        xml
-    };
+    explicit ConfigFile(std::string filePath);
+    ~ConfigFile();
 
     //定位到某个section，默认default
     void beginSection(std::string section = "default");
@@ -45,34 +38,27 @@ public:
     //清空配置内容
     void clear();
     //返回当前配置文件格式
-    Format format() const;
+    ConfigFileType type() const;
     //返回当前配置文件路径
     std::string filePath() const;
 
-    ConfigFile(std::string filePath);
-    virtual ~ConfigFile();
-
-protected:
+private:
     //解析文件过程
     void parseFile();
     //输出文件过程
     void outputFile();
     //设置文件格式
-    void setFormat(Format format);
-    //从data中构建配置文件内容
-    virtual std::string buildFileContent(const ConfigData& data) const = 0;
-private:
+    void setFormat(ConfigFileType format);
     //设置文件是否可写
     void setWritable(bool isWritable);
-    //读取文件
-    std::string readFile(const std::string& filePath) const;
+
 private:
     //       section               key          value
     ConfigData data;
     //配置文件路径
     std::string filePathData;
     //文件格式
-    Format formatData;
+    ConfigFileType typeData;
     //是否可写入
     bool isWritableData;
     //当前section

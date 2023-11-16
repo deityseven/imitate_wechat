@@ -1,7 +1,22 @@
 #include "config_file.h"
 #include <file_util.h>
 #include <stdexcept>
-#include "./configfile/parser/config_file_content_parser.h"
+#include "./parser_builder/parser/config_file_content_parser.h"
+#include "./parser_builder/builder/config_file_content_builder.h"
+
+ConfigFile::ConfigFile(std::string filePath)
+    :currentSection("default"),
+    typeData(ConfigFileType::None),
+    isWritableData(false),
+    filePathData(filePath)
+{
+    parseFile();
+}
+
+ConfigFile::~ConfigFile()
+{
+    outputFile();
+}
 
 inline void ConfigFile::beginSection(std::string section)
 {
@@ -113,13 +128,13 @@ bool ConfigFile::isWritable() const
 void ConfigFile::clear()
 {
     this->data.clear();
-    this->formatData = ConfigFile::Format::none;
+    this->typeData = ConfigFileType::None;
     this->filePathData.clear();
 }
 
-ConfigFile::Format ConfigFile::format() const
+ConfigFileType ConfigFile::type() const
 {
-    return this->formatData;
+    return this->typeData;
 }
 
 std::string ConfigFile::filePath() const
@@ -127,38 +142,24 @@ std::string ConfigFile::filePath() const
     return this->filePathData;
 }
 
-ConfigFile::ConfigFile(std::string filePath)
-    :currentSection("default"),
-    formatData(ConfigFile::Format::none), 
-    isWritableData(false),
-    filePathData(filePath)
-{
-}
-
-ConfigFile::~ConfigFile()
-{
-    clear();
-}
-
-std::string ConfigFile::readFile(const std::string& filePath) const
-{
-    return FileUtil::readAllText(filePath);
-}
 
 void ConfigFile::parseFile()
 {
     bool isWritable = FileUtil::canWrite(this->filePathData);
     setWritable(isWritable);
-    auto fileContent = readFile(this->filePathData);
-    
-    ConfigFileContentParser::instance().parseContent(fileContent, this->data);
+    auto fileContent = FileUtil::readAllText(this->filePathData);
+    //type
+    this->typeData = FileUtil::fileContentFormat(fileContent);
+
+    ConfigFileContentParser::instance().parseContent(fileContent, this->typeData, this->data);
 }
 
 void ConfigFile::outputFile()
 {
     if (this->isWritableData == false) return;
 
-    auto& fileContent = buildFileContent(this->data);
+    std::string fileContent = ConfigFileContentBuilder::instance().buildFileContent(this->data, this->typeData);
+
     FileUtil::saveToText(fileContent, this->filePathData);
 }
 
@@ -167,7 +168,7 @@ void ConfigFile::setWritable(bool isWritable)
     this->isWritableData = isWritable;
 }
 
-void ConfigFile::setFormat(Format format)
+void ConfigFile::setFormat(ConfigFileType format)
 {
-    this->formatData = format;
+    this->typeData = format;
 }

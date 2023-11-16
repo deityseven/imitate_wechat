@@ -2,10 +2,11 @@
 #include <map>
 #include <string>
 
-#include <common/config_file.h>
+#include <configfile/config_file.h>
 
 int main(int argc, char *argv[])
 {
+    ConfigFile file("./configs/system.ini");
 
 	return 0;
 }

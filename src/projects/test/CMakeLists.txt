@@ -19,6 +19,7 @@ source_group(main FILES ${MAIN_SRC})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/src/projects
+					${CMAKE_SOURCE_DIR}/src/projects/common
 )
 
 #库目录
@@ -37,6 +38,8 @@ endif(WIN32)
 #链接静态库
 link_libraries(
 	common
+    configfile
+    util
 )
 
 if(WIN32)

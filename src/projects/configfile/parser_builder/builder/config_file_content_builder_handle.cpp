@@ -1,9 +1,16 @@
-#include "config_file_content_parser_handle.h"
+#include "config_file_content_builder_handle.h"
 
-bool ConfigFileContentParserHandle::execute(const std::string& configFileContent, const ConfigFileType& type, ConfigData& out)
+bool ConfigFileContentBuilderHandle::execute(std::string & configFileContent, const ConfigFileType & type, const ConfigData & data)
 {
     if (canHandle(type))
-        return handle(configFileContent, out);
+    {
+        return handle(data, configFileContent);
+    }
     else
-        return next->execute(configFileContent, type, out);
+    {
+        if (next != nullptr)
+            return next->execute(configFileContent, type, data);
+    }
+
+    return false;
 }

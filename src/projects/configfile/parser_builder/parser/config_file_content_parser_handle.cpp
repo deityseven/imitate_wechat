@@ -5,5 +5,10 @@ bool ConfigFileContentParserHandle::execute(const std::string& configFileContent
     if (canHandle(type))
         return handle(configFileContent, out);
     else
-        return next->execute(configFileContent, type, out);
+    {
+        if(next != nullptr)
+            return next->execute(configFileContent, type, out);
+    }
+
+    return false;
 }

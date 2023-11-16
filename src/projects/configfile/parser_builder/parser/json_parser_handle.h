@@ -1,12 +1,12 @@
-#ifndef INI_PARSER_HANDLE_H
-#define INI_PARSER_HANDLE_H
+#ifndef JSON_PARSER_HANDLE_H
+#define JSON_PARSER_HANDLE_H
 
 #include "config_file_content_parser_handle.h"
 
-class IniParserHandle : public ConfigFileContentParserHandle
+class JsonParserHandle : public ConfigFileContentParserHandle
 {
 public:
-    IniParserHandle();
+    JsonParserHandle();
 
 protected:
 

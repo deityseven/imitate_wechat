@@ -1,27 +1,27 @@
-#ifndef CONFIG_FILE_CONTENT_PARSER_H
-#define CONFIG_FILE_CONTENT_PARSER_H
+#ifndef CONFIG_FILE_CONTENT_BUILDER_H
+#define CONFIG_FILE_CONTENT_BUILDER_H
 
 #include "type_struct.h"
 #include <string>
 
-class ConfigFileContentParserHandle;
+class ConfigFileContentBuilderHandle;
 
-class ConfigFileContentParser
+class ConfigFileContentBuilder
 {
 public:
 
-    static ConfigFileContentParser& instance()
+    static ConfigFileContentBuilder& instance()
     {
-        static ConfigFileContentParser ins;
+        static ConfigFileContentBuilder ins;
         return ins;
     }
 
-    void parseContent(const std::string & fileContent, ConfigData& data);
+    std::string buildFileContent(const ConfigData& data, const ConfigFileType& type);
 
 private:
-    ConfigFileContentParser();
+    ConfigFileContentBuilder();
     //处理器头
-    ConfigFileContentParserHandle* handleHead;
+    ConfigFileContentBuilderHandle* handleHead;
 };
 
 #endif // !CONFIG_FILE_H

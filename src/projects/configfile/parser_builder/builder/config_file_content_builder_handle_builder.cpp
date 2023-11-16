@@ -1,10 +1,11 @@
-#include "config_file_content_parser_handle_builder.h"
-#include "ini_parser_handle.h"
+#include "config_file_content_builder_handle_builder.h"
+#include "ini_builder_handle.h"
+#include "config_file_content_builder_handle.h"
 
-ConfigFileContentParserHandle * ConfigFileContentParserHandleBuilder::build()
+ConfigFileContentBuilderHandle * ConfigFileContentBuilderHandleBuilder::build()
 {
-    ConfigFileContentParserHandle* head = new IniParserHandle;
-    head->next == nullptr;
+    ConfigFileContentBuilderHandle* head = new IniBuilderHandle;
+    head->next = nullptr;
 
     return head;
 }
