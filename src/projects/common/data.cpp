@@ -1,31 +1,30 @@
 #include "data.h"
 
+Data::Data(void)
+    :typeInfo(typeid(void))
+{
+}
+
 Data::Data(std::string data)
+    : typeInfo(typeid(std::string))
 {
     this->data.swap(data);
 }
 
-Data::Data(int data)
-{
-    this->data.swap(std::to_string(data));
-}
-
-Data::Data(float data)
-{
-    this->data.swap(std::to_string(data));
-}
-
 Data::Data(double data)
+    : typeInfo(typeid(double))
 {
     this->data.swap(std::to_string(data));
 }
 
 Data::Data(long data)
+    : typeInfo(typeid(long))
 {
     this->data.swap(std::to_string(data));
 }
 
 Data::Data(bool data)
+    : typeInfo(typeid(bool))
 {
     if (data == true)
         this->data.swap(std::string("true"));

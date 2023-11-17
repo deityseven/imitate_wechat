@@ -2,14 +2,13 @@
 #define DATA_H
 
 #include <string>
+#include <typeindex>
 
 class Data
 {
 public:
-    Data() = default;
+    Data(void);
     Data(std::string data);
-    Data(int data);
-    Data(float data);
     Data(double data);
     Data(long data);
     Data(bool data);
@@ -23,9 +22,15 @@ public:
 
     ~Data() = default;
 
+    template<typename U> 
+    bool isType() const
+    {
+        return typeInfo == std::type_index(typeid(U));
+    }
+
 private:
     std::string data;
+    std::type_index typeInfo;
 };
-
 
 #endif // !DATA_H

@@ -1,12 +1,12 @@
-#ifndef INI_BUILDER_HANDLE_H
-#define INI_BUILDER_HANDLE_H
+#ifndef JSON_BUILDER_HANDLE_H
+#define JSON_BUILDER_HANDLE_H
 
 #include "config_file_content_builder_handle.h"
 
-class IniBuilderHandle : public ConfigFileContentBuilderHandle
+class JsonBuilderHandle : public ConfigFileContentBuilderHandle
 {
 public:
-    IniBuilderHandle();
+    JsonBuilderHandle();
 
 protected:
     // 通过 ConfigFileContentBuilderHandle 继承

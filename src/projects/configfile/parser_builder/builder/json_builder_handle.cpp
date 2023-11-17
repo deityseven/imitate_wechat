@@ -1,19 +1,18 @@
-#include "ini_builder_handle.h"
-#include "file_util.h"
-#include "string_util.h"
+#include "json_builder_handle.h"
+#include <json/json.hpp>
 
-IniBuilderHandle::IniBuilderHandle()
+JsonBuilderHandle::JsonBuilderHandle()
 {
 }
 
-bool IniBuilderHandle::canHandle(const ConfigFileType & type)
+bool JsonBuilderHandle::canHandle(const ConfigFileType & type)
 {
-    return type == ConfigFileType::Ini;
+    return type == ConfigFileType::Json;
 }
 
-bool IniBuilderHandle::handle(const ConfigData & data, std::string & out)
+bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
 {
-    std::string fileContent;
+    nlohmann::json root;
 
     //default section
     std::string defaultSectionName = "default";
@@ -23,10 +22,16 @@ bool IniBuilderHandle::handle(const ConfigData & data, std::string & out)
         const std::string& key = pair.first;
         const Data& value = pair.second;
 
-        fileContent += key;
-        fileContent.push_back('=');
-        fileContent += value.toString();
-        fileContent.push_back('\n');
+        nlohmann::json keyJson;
+
+        if(value.isType<std::string>())
+            root[key] = value.toString();
+        else if (value.isType<long>())
+            root[key] = value.toLong();
+        else if (value.isType<double>())
+            root[key] = value.toDouble();
+        else if (value.isType<bool>())
+            root[key] = value.toBool();
     }
 
     //other section
@@ -35,12 +40,7 @@ bool IniBuilderHandle::handle(const ConfigData & data, std::string & out)
         const std::string& sectionName = sectionPair.first;
         if (sectionPair.first == defaultSectionName) continue;
 
-        //add section name
-        fileContent.push_back('\n');
-        fileContent.push_back('[');
-        fileContent += sectionName;
-        fileContent.push_back(']');
-        fileContent.push_back('\n');
+        nlohmann::json sectionJson;
 
         //add section's key and value
         for (auto& keyAndValuePair : sectionPair.second)
@@ -48,14 +48,22 @@ bool IniBuilderHandle::handle(const ConfigData & data, std::string & out)
             const std::string& key = keyAndValuePair.first;
             const Data& value = keyAndValuePair.second;
 
-            fileContent += key;
-            fileContent.push_back('=');
-            fileContent += value.toString();
-            fileContent.push_back('\n');
+            nlohmann::json keyJson;
+
+            if (value.isType<std::string>())
+                sectionJson[key] = value.toString();
+            else if (value.isType<long>())
+                sectionJson[key] = value.toLong();
+            else if (value.isType<double>())
+                sectionJson[key] = value.toDouble();
+            else if (value.isType<bool>())
+                sectionJson[key] = value.toBool();
         }
+
+        root[sectionName] = sectionJson;
     }
 
-    out.swap(fileContent);
+    out.swap(root.dump(4));
 
     return true;
 }

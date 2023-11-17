@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    ConfigFile file("./configs/system.ini");
+    ConfigFile file("./configs/system.json");
 
 	return 0;
 }

@@ -19,13 +19,19 @@ set(STRING_SRC
 	string_util.cpp
 )
 
+set(THREAD_SRC
+	threadpool.hpp
+)
+
 set(SRCS
+	${THREAD_SRC}
 	${STRING_SRC}
 	${PLATFORM_SRC}
 	${FILE_SRC}
 )
 
 #筛选显示
+source_group(thread FILES ${THREAD_SRC})
 source_group(string FILES ${STRING_SRC})
 source_group(platform FILES ${PLATFORM_SRC})
 source_group(file FILES ${FILE_SRC})

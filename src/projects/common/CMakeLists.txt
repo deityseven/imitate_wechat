@@ -10,6 +10,7 @@ set(PLATFORM_SRC
 
 set(COMMON_SRC
 	type_struct.h
+    any.hpp
     data.h
     data.cpp
 )

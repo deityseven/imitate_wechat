@@ -1,6 +1,5 @@
 {
     "key1": "string",
-    //"#key0=value0",
     "key2": "value0",
     "key3": 80,
     "key4": 2.33,
