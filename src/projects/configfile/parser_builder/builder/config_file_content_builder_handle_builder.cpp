@@ -8,8 +8,10 @@ ConfigFileContentBuilderHandle * ConfigFileContentBuilderHandleBuilder::build()
 {
     ConfigFileContentBuilderHandle* head = new IniBuilderHandle;
     ConfigFileContentBuilderHandle* json = new JsonBuilderHandle;
+    ConfigFileContentBuilderHandle* xml = new XmlBuilderHandle;
     head->next = json;
-    json->next = nullptr;
+    json->next = xml;
+    xml->next = nullptr;
 
     return head;
 }

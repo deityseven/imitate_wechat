@@ -1,18 +1,16 @@
 <config>
-    <default>
-        <key1 value="string"/>
-        <key1 value="value0"/>
-        <key1 value=80/>
-        <key1 value=2.33/>
-    </default>
+    <key1 value="string"/>
+    <key2 value="value0"/>
+    <key3 value="80"/>
+    <key4 value="2.33"/>
 
     <system>
         <ip value="127.0.0.1"/>
-        <port value=6565/>
+        <port value="6565"/>
     </system>
 
     <inc>
         <ip value="192.168.0.1"/>
-        <port value=6363/>
+        <port value="6363"/>
     </inc>
 </config>

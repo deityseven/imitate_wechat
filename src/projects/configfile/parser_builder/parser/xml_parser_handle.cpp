@@ -22,6 +22,20 @@ bool XmlParserHandle::handle(const std::string & content, ConfigData & data)
     for (auto section : root)
     {
         std::string sectionName(section.name());
+        if (section.first_child().type() != pugi::xml_node_type::node_element)
+        {
+            sectionName = "default";
+
+            std::string key(section.name());
+            std::string value(section.child_value());
+            if (value.empty())
+            {
+                value = section.attribute("value").value();
+            }
+
+            data[sectionName][key] = value;
+        }
+
         for (auto keyAndValue : section)
         {
             std::string key(keyAndValue.name());

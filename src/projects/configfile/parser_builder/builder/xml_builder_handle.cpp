@@ -1,18 +1,21 @@
-#include "json_builder_handle.h"
-#include <json/json.hpp>
+#include "xml_builder_handle.h"
+#include <pugixml/pugixml.hpp>
+#include <pugixml/pugiconfig.hpp>
+#include <sstream>
 
-JsonBuilderHandle::JsonBuilderHandle()
+XmlBuilderHandle::XmlBuilderHandle()
 {
 }
 
-bool JsonBuilderHandle::canHandle(const ConfigFileType & type)
+bool XmlBuilderHandle::canHandle(const ConfigFileType & type)
 {
-    return type == ConfigFileType::Json;
+    return type == ConfigFileType::Xml;
 }
 
-bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
+bool XmlBuilderHandle::handle(const ConfigData & data, std::string & out)
 {
-    nlohmann::json root;
+    pugi::xml_document doc;
+    auto root = doc.append_child("config");
 
     //default section
     std::string defaultSectionName = "default";
@@ -22,16 +25,18 @@ bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
         const std::string& key = pair.first;
         const Data& value = pair.second;
 
-        nlohmann::json keyJson;
+        auto node = root.append_child(key.c_str());
 
-        if(value.isType<std::string>())
-            root[key] = value.toString();
+        auto attribute = node.append_attribute("value");
+
+        if (value.isType<std::string>())
+            attribute.set_value(value.toString().c_str());
         else if (value.isType<long>())
-            root[key] = value.toLong();
+            attribute.set_value(value.toLong());
         else if (value.isType<double>())
-            root[key] = value.toDouble();
+            attribute.set_value(value.toDouble());
         else if (value.isType<bool>())
-            root[key] = value.toBool();
+            attribute.set_value(value.toBool());
     }
 
     //other section
@@ -40,7 +45,7 @@ bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
         const std::string& sectionName = sectionPair.first;
         if (sectionPair.first == defaultSectionName) continue;
 
-        nlohmann::json sectionJson;
+        auto sectionNode = root.append_child(sectionName.c_str());
 
         //add section's key and value
         for (auto& keyAndValuePair : sectionPair.second)
@@ -48,22 +53,25 @@ bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
             const std::string& key = keyAndValuePair.first;
             const Data& value = keyAndValuePair.second;
 
-            nlohmann::json keyJson;
+            auto keyNode = sectionNode.append_child(key.c_str());
+
+            auto attribute = keyNode.append_attribute("value");
 
             if (value.isType<std::string>())
-                sectionJson[key] = value.toString();
+                attribute.set_value(value.toString().c_str());
             else if (value.isType<long>())
-                sectionJson[key] = value.toLong();
+                attribute.set_value(value.toLong());
             else if (value.isType<double>())
-                sectionJson[key] = value.toDouble();
+                attribute.set_value(value.toDouble());
             else if (value.isType<bool>())
-                sectionJson[key] = value.toBool();
+                attribute.set_value(value.toBool());
         }
 
-        root[sectionName] = sectionJson;
     }
 
-    out.swap(root.dump(4));
+    std::stringstream os;
+    doc.save(os, "\t", pugi::format_indent);
+    out.swap(os.str());
 
     return true;
 }

@@ -15,9 +15,9 @@ public:
 
     std::string toString() const;
     int toInt() const;
+    long toLong() const;
     float toFloat() const;
     double toDouble() const;
-    long toLong() const;
     bool toBool() const;
 
     ~Data() = default;
@@ -29,7 +29,11 @@ public:
     }
 
 private:
-    std::string data;
+    std::string stringData;
+    double doubleData;
+    long longData;
+    bool boolData;
+
     std::type_index typeInfo;
 };
 
