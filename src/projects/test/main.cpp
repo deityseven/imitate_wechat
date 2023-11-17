@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    ConfigFile file("./configs/system.json");
+    ConfigFile file("./configs/system.xml");
 
 	return 0;
 }

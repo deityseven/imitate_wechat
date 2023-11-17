@@ -2,6 +2,7 @@
 #include "config_file_content_builder_handle.h"
 #include "ini_builder_handle.h"
 #include "json_builder_handle.h"
+#include "xml_builder_handle.h"
 
 ConfigFileContentBuilderHandle * ConfigFileContentBuilderHandleBuilder::build()
 {

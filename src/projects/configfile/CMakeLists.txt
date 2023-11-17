@@ -15,6 +15,8 @@ set(PARSER_SRC
     ./parser_builder/parser/ini_parser_handle.cpp
     ./parser_builder/parser/json_parser_handle.h
     ./parser_builder/parser/json_parser_handle.cpp
+    ./parser_builder/parser/xml_parser_handle.h
+    ./parser_builder/parser/xml_parser_handle.cpp
 )
 
 set(BUILDER_SRC
@@ -28,6 +30,8 @@ set(BUILDER_SRC
     ./parser_builder/builder/ini_builder_handle.cpp
     ./parser_builder/builder/json_builder_handle.h
     ./parser_builder/builder/json_builder_handle.cpp
+    ./parser_builder/builder/xml_builder_handle.h
+    ./parser_builder/builder/xml_builder_handle.cpp
 )
 
 set(CONFIG_SRC
@@ -49,6 +53,7 @@ source_group(builder FILES ${BUILDER_SRC})
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
+					${CMAKE_SOURCE_DIR}/external/pugixml/include
 					${CMAKE_SOURCE_DIR}/src/projects/common
 					${CMAKE_SOURCE_DIR}/src/projects/util
 )
@@ -68,13 +73,15 @@ endif(WIN32)
 
 if(WIN32)
 #链接库
-link_libraries( 
+link_libraries(
+    pugixml
 )
 endif(WIN32)
 
 if(UNIX)
 #链接库
-link_libraries( 
+link_libraries(
+    pugixml
 )
 endif(UNIX)
 

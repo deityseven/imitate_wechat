@@ -46,3 +46,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_dir}/bin)
 #添加源码目录
 #src 
 add_subdirectory(src)
+add_subdirectory(external/pugixml)

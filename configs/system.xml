@@ -1,0 +1,18 @@
+<config>
+    <default>
+        <key1>string</key1>
+        <key2>value0</key2>
+        <key3>80</key3>
+        <key4>2.33</key4>
+    </default>
+
+    <system>
+        <ip>127.0.0.1</ip>
+        <port>6565</port>
+    </system>
+
+    <inc>
+        <ip>192.168.0.1</ip>
+        <port>6363</port>
+    </inc>
+</config>
