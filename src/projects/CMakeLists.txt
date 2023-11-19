@@ -1,4 +1,8 @@
 ADD_SUBDIRECTORY(common)
 ADD_SUBDIRECTORY(util)
 ADD_SUBDIRECTORY(configfile)
+ADD_SUBDIRECTORY(http_client)
+ADD_SUBDIRECTORY(http_server)
+ADD_SUBDIRECTORY(wechat_client)
+ADD_SUBDIRECTORY(wechat_server)
 ADD_SUBDIRECTORY(test)

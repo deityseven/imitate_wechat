@@ -59,6 +59,7 @@ Data::Data(double data)
     : Data()
 {
     this->typeInfo = std::type_index(typeid(double));
+    this->doubleData = data;
     this->stringData.swap(std::to_string(data));
 }
 
@@ -66,6 +67,7 @@ Data::Data(long data)
     : Data()
 {
     this->typeInfo = std::type_index(typeid(long));
+    this->longData = data;
     this->stringData.swap(std::to_string(data));
 }
 
@@ -73,6 +75,7 @@ Data::Data(bool data)
     : Data()
 {
     this->typeInfo = std::type_index(typeid(bool));
+    this->boolData = data;
     if (data == true)
         this->stringData.swap(std::string("true"));
     else

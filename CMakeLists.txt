@@ -47,3 +47,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_dir}/bin)
 #src 
 add_subdirectory(src)
 add_subdirectory(external/pugixml)
+add_subdirectory(external/spdlog)

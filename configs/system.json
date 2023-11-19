@@ -10,5 +10,11 @@
     "inc": {
         "ip": "192.168.0.1",
         "port": 6363
+    },
+    "http":{
+        "serverIp":"192.168.0.1",
+        "serverPort": 3343,
+        "readTimeout": 3000,
+        "writeTimeout": 3000
     }
 }

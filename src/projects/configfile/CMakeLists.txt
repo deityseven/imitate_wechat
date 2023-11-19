@@ -71,19 +71,10 @@ endif(WIN32)
 #预编译宏
 #add_definitions(XXXX)
 
-if(WIN32)
-#链接库
 link_libraries(
     pugixml
+    util
 )
-endif(WIN32)
-
-if(UNIX)
-#链接库
-link_libraries(
-    pugixml
-)
-endif(UNIX)
 
 #共享库
 add_library(${PROJECT_NAME} STATIC ${SRCS})

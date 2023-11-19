@@ -18,6 +18,7 @@ source_group(main FILES ${MAIN_SRC})
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
+					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/src/projects
 					${CMAKE_SOURCE_DIR}/src/projects/common
 )
@@ -37,9 +38,8 @@ endif(WIN32)
 
 #链接静态库
 link_libraries(
-	common
-    configfile
-    util
+    wechat_client
+    spdlog
 )
 
 if(WIN32)

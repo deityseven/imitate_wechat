@@ -8,6 +8,7 @@ ConfigFile::ConfigFile(std::string filePath)
     :currentSection("default"),
     typeData(ConfigFileType::None),
     isWritableData(false),
+    isChange(false),
     filePathData(filePath)
 {
     parseFile();
@@ -15,25 +16,25 @@ ConfigFile::ConfigFile(std::string filePath)
 
 ConfigFile::~ConfigFile()
 {
-    outputFile();
+    if(this->isChange) outputFile();
 }
 
-inline void ConfigFile::beginSection(std::string section)
+void ConfigFile::beginSection(std::string section)
 {
     this->currentSection.swap(section);
 }
 
-inline void ConfigFile::endSection()
+void ConfigFile::endSection()
 {
     this->currentSection = std::string("default");
 }
 
-inline std::string ConfigFile::section() const
+std::string ConfigFile::section() const
 {
     return this->currentSection;
 }
 
-inline Data ConfigFile::value(std::string key) const
+Data ConfigFile::value(std::string key) const
 {
     try
     {
@@ -47,13 +48,15 @@ inline Data ConfigFile::value(std::string key) const
     }
 }
 
-inline void ConfigFile::setValue(std::string key, Data data)
+void ConfigFile::setValue(std::string key, Data data)
 {
     try
     {
         auto& keyValueMap = this->data.at(currentSection);
 
         keyValueMap[key] = data;
+
+        this->isChange = true;
     }
     catch (...)
     {
@@ -61,7 +64,7 @@ inline void ConfigFile::setValue(std::string key, Data data)
     }
 }
 
-inline StringList ConfigFile::allKeys() const
+StringList ConfigFile::allKeys() const
 {
     StringList list;
 
@@ -76,11 +79,12 @@ inline StringList ConfigFile::allKeys() const
     }
     catch (...)
     {
-        return list;
     }
+
+    return list;
 }
 
-inline bool ConfigFile::hasKey(std::string key) const
+bool ConfigFile::hasKey(std::string key) const
 {
     try
     {
@@ -107,6 +111,8 @@ bool ConfigFile::deleteKey(std::string key)
 
         keyValueMap.erase(iter);
 
+        this->isChange = true;
+
         return true;
     }
     catch (...)
@@ -130,6 +136,8 @@ void ConfigFile::clear()
     this->data.clear();
     this->typeData = ConfigFileType::None;
     this->filePathData.clear();
+
+    this->isChange = true;
 }
 
 ConfigFileType ConfigFile::type() const
@@ -141,7 +149,6 @@ std::string ConfigFile::filePath() const
 {
     return this->filePathData;
 }
-
 
 void ConfigFile::parseFile()
 {

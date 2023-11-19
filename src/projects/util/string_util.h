@@ -5,9 +5,9 @@
 class StringUtil
 {
 public:
-    //将src字符串按sep字符分割
+    //将src字符串按sep字符分割 分割后返回的结果中不存在 sep
     static StringList split(const std::string src, const char sep);
-    //将src字符串按字串chr分割
+    //将src字符串按字串chr分割 分割后返回的结果中不存在 sep
     static StringList split(const std::string src, const std::string chr);
     //将src字符串中的所有ch字符剔除
     static std::string eliminate(const std::string src, const char ch);

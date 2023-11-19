@@ -1,5 +1,4 @@
 #include "platform_util.h"
-#include <platform_define.h>
 
 #ifdef I_OS_WIN
 #include <io.h>

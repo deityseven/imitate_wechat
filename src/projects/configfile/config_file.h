@@ -6,12 +6,12 @@
 #include <map>
 
 #include <type_struct.h>
-#include <data.h>
 
 //配置文件抽象
 class ConfigFile
 {
 public:
+
     explicit ConfigFile(std::string filePath);
     ~ConfigFile();
 
@@ -61,6 +61,8 @@ private:
     ConfigFileType typeData;
     //是否可写入
     bool isWritableData;
+    //配置项已修改
+    bool isChange;
     //当前section
     std::string currentSection;
 };

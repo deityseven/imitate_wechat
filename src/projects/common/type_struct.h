@@ -17,4 +17,5 @@ enum class ConfigFileType
     Xml
 };
 
+
 #endif // !TYPE_STRUCT_H
