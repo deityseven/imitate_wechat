@@ -9,12 +9,20 @@ set(CLIENT_SRC
 	server.cpp
 )
 
+set(HANDLES_SRC
+	./handels/server_handler.h
+	./handels/server_online.h
+	./handels/account_verify.h
+)
+
 set(SRCS 
+	${HANDLES_SRC}
 	${CLIENT_SRC}
 )
 
 #筛选显示
 source_group(server FILES ${CLIENT_SRC})
+source_group(handles FILES ${HANDLES_SRC})
 
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
