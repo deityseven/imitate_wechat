@@ -9,13 +9,8 @@ HttpServer::HttpServer(std::string serverHost, unsigned int serverPort)
 {
     this->server = new httplib::Server;
 
-    ServerHandle* sh = new SeverOnLine;
-
-    this->server->Post("/api/serverOnline", std::function<void(const httplib::Request& request, httplib::Response& response)>((*sh)));
-
-    this->server->Post("/api/accountVerify", [](const httplib::Request& request, httplib::Response& response) {
-         
-    });
+    this->server->Post("/api/serverOnline", SeverOnLine());
+    this->server->Post("/api/accountVerify", AccountVerify());
 }
 
 HttpServer::~HttpServer()

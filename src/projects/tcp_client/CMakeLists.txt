@@ -1,36 +1,26 @@
-project(httpserver)
+project(tcpclient)
 
 #C++标准 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CLIENT_SRC
-	server.h
-	server.cpp
-)
-
-set(HANDLES_SRC
-	./handels/server_handler.h
-	./handels/server_online.h
-	./handels/server_online.cpp
-	./handels/account_verify.h
-	./handels/account_verify.cpp
+	client.h
+	client.cpp
 )
 
 set(SRCS 
-	${HANDLES_SRC}
 	${CLIENT_SRC}
 )
 
 #筛选显示
-source_group(server FILES ${CLIENT_SRC})
-source_group(handles FILES ${HANDLES_SRC})
+source_group(client FILES ${CLIENT_SRC})
 
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
-					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/src/projects
+					${CMAKE_SOURCE_DIR}/src/projects/common
 )
 
 #库目录
@@ -48,7 +38,6 @@ endif(WIN32)
 
 #链接静态库
 link_libraries(
-    spdlog
 )
 
 if(WIN32)
@@ -63,7 +52,6 @@ link_libraries(
 ) 
 endif(UNIX)
 
-#可执行文件
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${output_dir}/bin/${CMAKE_CFG_INTDIR})

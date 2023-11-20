@@ -1,4 +1,4 @@
-project(httpserver)
+project(tcpserver)
 
 #C++标准 
 set(CMAKE_CXX_STANDARD 11)

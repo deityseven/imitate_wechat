@@ -21,6 +21,8 @@ public:
     bool userInfoCheck(UserInfo user, std::string& checkErrorInfo);
     //概述：返回当前用户信息
     UserInfo* getCurrentUser();
+    //登录
+
 private:
     void init();
     UserInfo* findUserHistory(UserInfo& user);
