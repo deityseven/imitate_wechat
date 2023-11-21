@@ -2,6 +2,9 @@
 #define TCP_SERVER_H
 
 #include <string>
+#include <memory>
+
+class TcpServerImpl;
 
 class TcpServer
 {
@@ -10,10 +13,14 @@ public:
     ~TcpServer();
 
     void listen();
+protected:
+    void startAccept();
 
 private:
     std::string serverHost;
     unsigned int serverPort;
+
+    TcpServerImpl* impl;
 };
 
 #endif // !CONFIG_FILE_H

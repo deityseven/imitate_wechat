@@ -30,6 +30,7 @@ source_group(handles FILES ${HANDLES_SRC})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/external/spdlog/include
+					${CMAKE_SOURCE_DIR}/external/asio/include
 					${CMAKE_SOURCE_DIR}/src/projects
 )
 
