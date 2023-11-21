@@ -1,0 +1,132 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tutorial</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Asio">
+<link rel="up" href="../index.html" title="Asio">
+<link rel="prev" href="using.html" title="Using, Building, and Configuring Asio">
+<link rel="next" href="tutorial/tuttimer1.html" title="Timer.1 - Using a timer synchronously">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"><img alt="asio C++ library" width="250" height="60" src="../asio.png"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="using.html"><img src="../prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../home.png" alt="Home"></a><a accesskey="n" href="tutorial/tuttimer1.html"><img src="../next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="asio.tutorial"></a><a class="link" href="tutorial.html" title="Tutorial">Tutorial</a>
+</h2></div></div></div>
+<h4>
+<a name="asio.tutorial.h0"></a>
+      <span><a name="asio.tutorial.basic_skills"></a></span><a class="link" href="tutorial.html#asio.tutorial.basic_skills">Basic
+      Skills</a>
+    </h4>
+<p>
+      The tutorial programs in this first section introduce the fundamental concepts
+      required to use the asio toolkit. Before plunging into the complex world of
+      network programming, these tutorial programs illustrate the basic skills using
+      simple asynchronous timers.
+    </p>
+    <p>
+      译: 第一部分中的教程程序介绍了使用asio工具包所需的基本概念。在进入复杂的网络编程世界之前，这些教程程序使用简单的异步计时器演示基本技能。
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          <a class="link" href="tutorial/tuttimer1.html" title="Timer.1 - Using a timer synchronously">Timer.1 - Using a timer synchronously 译: 同步使用计时器</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tuttimer2.html" title="Timer.2 - Using a timer asynchronously">Timer.2 - Using a timer asynchronously 译: 异步使用计时器</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tuttimer3.html" title="Timer.3 - Binding arguments to a completion handler">Timer.3 - Binding arguments to
+          a completion handler 译: 将参数绑定到完成处理程序</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tuttimer4.html" title="Timer.4 - Using a member function as a completion handler">Timer.4 - Using a member function
+          as a completion handler 译: 使用成员函数作为完成处理程序</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tuttimer5.html" title="Timer.5 - Synchronising completion handlers in multithreaded programs">Timer.5 - Synchronising completion
+          handlers in multithreaded programs 译: 同步多线程程序中的完成处理程序</a>
+        </li>
+</ul></div>
+<h4>
+<a name="asio.tutorial.h1"></a>
+      <span><a name="asio.tutorial.introduction_to_sockets"></a></span><a class="link" href="tutorial.html#asio.tutorial.introduction_to_sockets">Introduction
+      to Sockets</a>
+    </h4>
+<p>
+      The tutorial programs in this section show how to use asio to develop simple
+      client and server programs. These tutorial programs are based around the <a href="http://www.ietf.org/rfc/rfc867.txt" target="_top">daytime</a> protocol, which supports
+      both TCP and UDP.
+    </p>
+    <p>
+      译: 本节中的教程程序展示了如何使用asio开发简单的客户机和服务器程序。这些教程程序是基于日期时间协议的，它同时支持TCP和UDP。
+    </p>
+<p>
+      The first three tutorial programs implement the daytime protocol using TCP.
+    </p>
+    <p>
+      译: 前三个教程程序使用TCP实现日期时间协议。
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime1.html" title="Daytime.1 - A synchronous TCP daytime client">Daytime.1 - A synchronous TCP
+          daytime client 译: 一个同步tcp日期时间协议客户端</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime2.html" title="Daytime.2 - A synchronous TCP daytime server">Daytime.2 - A synchronous TCP
+          daytime server 译: 一个同步tcp日期时间协议服务端</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime3.html" title="Daytime.3 - An asynchronous TCP daytime server">Daytime.3 - An asynchronous TCP
+          daytime server 译: 一个异步tcp日期时间协议服务端</a>
+        </li>
+</ul></div>
+<p>
+      The next three tutorial programs implement the daytime protocol using UDP.
+    </p>
+    <p>
+      译: 接下来的三个教程程序使用UDP实现日期时间协议。
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime4.html" title="Daytime.4 - A synchronous UDP daytime client">Daytime.4 - A synchronous UDP
+          daytime client 译: 一个同步udp日期时间协议客户端</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime5.html" title="Daytime.5 - A synchronous UDP daytime server">Daytime.5 - A synchronous UDP
+          daytime server 译: 一个同步udp日期时间协议服务端</a>
+        </li>
+<li class="listitem">
+          <a class="link" href="tutorial/tutdaytime6.html" title="Daytime.6 - An asynchronous UDP daytime server">Daytime.6 - An asynchronous UDP
+          daytime server 译: 一个异步udp日期时间协议服务端</a>
+        </li>
+</ul></div>
+<p>
+      The last tutorial program in this section demonstrates how asio allows the
+      TCP and UDP servers to be easily combined into a single program.
+    </p>
+    <p>
+      译: 本节中的最后一个教程程序演示了asio如何允许TCP和UDP服务器轻松地组合到一个程序中。
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          <a class="link" href="tutorial/tutdaytime7.html" title="Daytime.7 - A combined TCP/UDP asynchronous server">Daytime.7 - A combined TCP/UDP
+          asynchronous server 译: 一个tcp/udp组合的异步服务端</a>
+        </li></ul></div>
+</div>
+<div class="copyright-footer">Copyright © 2003-2023 Christopher M. Kohlhoff<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="using.html"><img src="../prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../home.png" alt="Home"></a><a accesskey="n" href="tutorial/tuttimer1.html"><img src="../next.png" alt="Next"></a>
+</div>
+</body>
+</html>
