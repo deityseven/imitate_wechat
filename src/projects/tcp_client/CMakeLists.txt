@@ -19,6 +19,7 @@ source_group(client FILES ${CLIENT_SRC})
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
+					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/external/asio/include
 					${CMAKE_SOURCE_DIR}/src/projects
 					${CMAKE_SOURCE_DIR}/src/projects/common
@@ -34,11 +35,17 @@ if(WIN32)
 add_compile_options(/utf-8)
 endif(WIN32)
 
+if(WIN32)
+add_definitions(-D_WIN32_WINNT=0x0601)
+endif(WIN32)
+
 #预编译宏
 #add_definitions(XXXX)
 
 #链接静态库
 link_libraries(
+    common
+    spdlog
 )
 
 if(WIN32)
@@ -57,6 +64,8 @@ add_library(${PROJECT_NAME} STATIC ${SRCS})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${output_dir}/bin/${CMAKE_CFG_INTDIR})
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_ENVIRONMENT "Path=$(Path);${CMAKE_PREFIX_PATH}/bin")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_STANDALONE)
 
 #链接动态库
 target_link_libraries(${PROJECT_NAME}

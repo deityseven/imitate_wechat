@@ -2,9 +2,9 @@
 #include <map>
 #include <string>
 
-#include <wechat_client/wechat_client.h>
+#include <tcp_server/server.h>
 #include <spdlog/spdlog.h>
-#include <platform_define.h>
+#include <configfile/config_file.h>
 
 int main(int argc, char *argv[])
 {
@@ -12,27 +12,11 @@ int main(int argc, char *argv[])
     system("chcp 65001");
 #endif // WIN
 
-    //ConfigFile file("./configs/system.xml");
+    ConfigFile cf("./configs/system.json");
+    cf.beginSection("tcp");
 
-    WeChatClient client;
-
-    bool flag = client.checkServerOnline();
-    if (!flag)
-    {
-        spdlog::info("server not online...");
-    }
-
-    UserInfo user;
-    std::string checkErrorInfo;
-    user.userName = "admin";
-    user.password = "123";
-
-    flag = client.userInfoCheck(user, checkErrorInfo);
-    if (flag == true)
-    {
-        spdlog::info("user info :");
-        spdlog::info("{}", client.getCurrentUser()->toJson());
-    }
+    TcpServer server("127.0.0.1", cf.value("serverPort").toInt());
+    server.listen();
 
 	return 0;
 }
