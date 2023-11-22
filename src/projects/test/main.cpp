@@ -5,6 +5,7 @@
 #include <wechat_client/wechat_client.h>
 #include <spdlog/spdlog.h>
 #include <platform_define.h>
+#include <util/string_util.h>
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,15 @@ int main(int argc, char *argv[])
 #endif // WIN
 
     //ConfigFile file("./configs/system.xml");
+
+    auto list = StringUtil::split("aaaabbaaaabbaabbaaabbccc", "bb");
+
+    for (auto item : list)
+    {
+        std::cout << item << std::endl;
+    }
+
+    return 0;
 
     WeChatClient client;
 

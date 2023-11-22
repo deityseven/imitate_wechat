@@ -1,56 +1,52 @@
 #include "client.h"
 
-#include <http/httplib.h>
-#include <json/json.hpp>
+#include <asio.hpp>
+#include <spdlog/spdlog.h>
 
-HttpClient::HttpClient(std::string serverHost, unsigned int serverPort)
+class TcpClientImpl
 {
-    this->client = new httplib::Client(serverHost, serverPort);
-}
-
-HttpClient::~HttpClient()
-{
-    if (this->client != nullptr) delete this->client;
-}
-
-bool HttpClient::serverOnline()
-{
-    auto result = this->client->Post("/api/serverOnline");
-
-    if (result && (result->status == 200))
-        return true;
-
-    return false;
-}
-
-bool HttpClient::accountVerify(const std::string userInfo, std::string& response)
-{
-    auto result = this->client->Post("/api/accountVerify", userInfo, "application/json");
-
-    if (result && (result->status == 200))
+public:
+    TcpClientImpl(std::string serverHost, unsigned int serverPort)
+        :socketObject(io_context), serverHost(serverHost), serverPort(serverPort)
     {
-        auto resJson = nlohmann::json::parse(result->body);
-
-        auto statu = resJson["statu"].get<bool>();
-
-        if (statu == true)
-        {
-            response = resJson["data"].dump();
-            return true;
-        }
-        else response = resJson["message"].get<std::string>();
+        spdlog::info("serverHost: {} port: {}", serverHost, serverPort);
     }
 
-    return false;
+    bool connect()
+    {
+        socketObject.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string(this->serverHost), this->serverPort));
+        return true;
+    }
+
+    void sendMessage(const std::string data)
+    {
+        this->socketObject.send(asio::buffer(data));
+        this->socketObject.shutdown();
+    }
+
+private:
+    std::string serverHost;
+    unsigned int serverPort;
+    asio::io_context io_context;
+    asio::ip::tcp::socket socketObject;
+};
+
+
+TcpClient::TcpClient(std::string serverHost, unsigned int serverPort)
+    :impl(new TcpClientImpl(serverHost, serverPort))
+{
 }
 
-void HttpClient::setReadTimeout(unsigned int millisecond)
+TcpClient::~TcpClient()
 {
-    this->client->set_read_timeout(0, millisecond);
-
 }
 
-void HttpClient::setWriteTimeout(unsigned int millisecond)
+bool TcpClient::connect()
 {
-    this->client->set_write_timeout(0, millisecond);
+    return this->impl->connect();
+}
+
+void TcpClient::sendMessage(const std::string data)
+{
+    return this->impl->sendMessage(data);
 }

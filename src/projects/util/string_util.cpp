@@ -1,4 +1,5 @@
 #include "string_util.h"
+#include <algorithm>
 
 StringList StringUtil::split(const std::string src, const char sep)
 {
@@ -39,8 +40,13 @@ StringList StringUtil::split(const std::string src, const std::string chr)
         if (pos != std::string::npos)
         {
             content.emplace_back(src.begin() + currentPos, src.begin() + pos);
-
             currentPos = pos + chrlen;
+        }
+
+        if (pos == std::string::npos)
+        {
+            content.emplace_back(src.begin() + currentPos, src.end());
+            break;
         }
     }
 
