@@ -3,10 +3,7 @@
 #include <asio.hpp>
 #include <unordered_map>
 #include <spdlog/spdlog.h>
-
-
-asio::error_code codel;
-std::size_t size;
+#include <string>
 
 class TcpConnection
 {
@@ -15,27 +12,33 @@ public:
 		:socketObject(io_context), bufferSize(4096)
 	{
 		buff.reserve(bufferSize);
-		spdlog::info("TcpConnection: TcpConnection()");
 	}
 
-    ~TcpConnection()
-    {
-        spdlog::info("TcpConnection: ~TcpConnection()");
-    }
+	~TcpConnection()
+	{
+	}
 
-	asio::ip::tcp::socket& socket() 
+	asio::ip::tcp::socket& socket()
 	{
 		return socketObject;
+	}
+
+	std::string recvWecharId()
+	{
+		std::string id;
+		id.resize(10);
+		this->socketObject.receive(asio::buffer(id));
+		return id;
 	}
 
 	void start()
 	{
 		buff.clear();
 		buff.resize(this->bufferSize);
-		asio::async_read(this->socketObject, asio::buffer(buff), std::bind(&TcpConnection::CompletionCondition, this), std::bind(&TcpConnection::readSuccess, this, std::placeholders::_1, std::placeholders::_2));
+		asio::async_read(this->socketObject, asio::buffer(buff), std::bind(&TcpConnection::completionCondition, this), std::bind(&TcpConnection::readSuccess, this, std::placeholders::_1, std::placeholders::_2));
 	}
 
-	bool CompletionCondition()
+	bool completionCondition()
 	{
 		auto pos = buff.find('|');
 		return pos != std::string::npos;
@@ -43,17 +46,19 @@ public:
 
 	void readSuccess(asio::error_code ec, std::size_t size)
 	{
-		spdlog::info("ec.message : {} ec.value: {} size: {}", ec.message(), ec.value(), size);
+		//spdlog::info("ec.message : {} ec.value: {} size: {}", ec.message(), ec.value(), size);
 
 		if (ec == asio::error::eof)
 		{
-			spdlog::info("TcpConnection : dis connect");
+			spdlog::info("socket disconnect");
+			socketObject.shutdown(asio::socket_base::shutdown_type::shutdown_both);
+			socketObject.close();
 		}
 
 		if (size != 0)
 		{
 			this->message += buff;
-			spdlog::info("TcpConnection: recv: {}", this->message);
+			spdlog::info("socket recv: {}", this->message);
 		}
 
 		start();
@@ -68,7 +73,7 @@ private:
 
 class TcpServerImpl
 {
-    friend class TcpServer;
+	friend class TcpServer;
 
 public:
 	TcpServerImpl(unsigned int serverPort)
@@ -79,7 +84,7 @@ public:
 
 	void startAccept()
 	{
-        spdlog::info("server impl : startAccept");
+		spdlog::info("server impl : startAccept");
 
 		TcpConnection* connection = new TcpConnection(this->io_context);
 
@@ -88,10 +93,13 @@ public:
 
 	void acceptHandle(TcpConnection* connection)
 	{
-		spdlog::info("server impl : acceptHandle connection ");
+		std::string id = connection->recvWecharId();
+
+		spdlog::info("connection recv : id: {}", id);
+
 		connection->start();
 
-        startAccept();
+		startAccept();
 	}
 
 private:
@@ -102,7 +110,7 @@ private:
 };
 
 TcpServer::TcpServer(std::string serverHost, unsigned int serverPort)
-	:impl(new TcpServerImpl(serverPort))
+	:impl(new TcpServerImpl(serverPort)), serverHost(serverHost), serverPort(serverPort)
 {
 }
 
@@ -118,14 +126,7 @@ void TcpServer::listen()
 
 void TcpServer::startAccept()
 {
-	try
-	{
-		impl->startAccept();
-		impl->io_context.run();
-	}
-	catch (asio::error_code& e)
-	{
-		spdlog::info("server error : {}", e.message());
-	}
+	impl->startAccept();
+	impl->io_context.run();
 }
 
