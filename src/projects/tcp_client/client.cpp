@@ -21,7 +21,11 @@ public:
     void sendMessage(const std::string data)
     {
         this->socketObject.send(asio::buffer(data));
-        this->socketObject.shutdown();
+
+        //std::string recvData;
+        //this->socketObject.read_some(asio::buffer(recvData));
+        //spdlog::info("read : {}", recvData);
+        //this->socketObject.shutdown(asio::socket_base::shutdown_type::shutdown_send);
     }
 
 private:

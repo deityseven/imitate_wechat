@@ -4,16 +4,18 @@
 #include <unordered_map>
 #include <spdlog/spdlog.h>
 
-class TcpConnection : public std::enable_shared_from_this<TcpConnection>
+
+asio::error_code codel;
+std::size_t size;
+
+class TcpConnection
 {
 public:
-
-	typedef std::shared_ptr<TcpConnection> pointer;
-
 	TcpConnection(asio::io_context& io_context)
-		:socketObject(io_context)
+		:socketObject(io_context), bufferSize(4096)
 	{
-
+		buff.reserve(bufferSize);
+		spdlog::info("TcpConnection: TcpConnection()");
 	}
 
     ~TcpConnection()
@@ -28,25 +30,39 @@ public:
 
 	void start()
 	{
-        this->message.clear();
-        this->message.resize(1024);
-
-		asio::async_read(this->socketObject, asio::buffer(this->message), std::bind(&TcpConnection::completionCondition, this), std::bind(&TcpConnection::readSuccess, this));
+		buff.clear();
+		buff.resize(this->bufferSize);
+		asio::async_read(this->socketObject, asio::buffer(buff), std::bind(&TcpConnection::CompletionCondition, this), std::bind(&TcpConnection::readSuccess, this, std::placeholders::_1, std::placeholders::_2));
 	}
 
-	bool completionCondition()
+	bool CompletionCondition()
 	{
-        spdlog::info("server recv: completionCondition");
-		return this->message.find('|') != std::string::npos;
+		auto pos = buff.find('|');
+		return pos != std::string::npos;
 	}
 
-	void readSuccess()
+	void readSuccess(asio::error_code ec, std::size_t size)
 	{
-		spdlog::info("server recv: {}", this->message);
+		spdlog::info("ec.message : {} ec.value: {} size: {}", ec.message(), ec.value(), size);
+
+		if (ec == asio::error::eof)
+		{
+			spdlog::info("TcpConnection : dis connect");
+		}
+
+		if (size != 0)
+		{
+			this->message += buff;
+			spdlog::info("TcpConnection: recv: {}", this->message);
+		}
+
+		start();
 	}
 
 private:
 	asio::ip::tcp::socket socketObject;
+	const size_t bufferSize;
+	std::string buff;
 	std::string message;
 };
 
@@ -61,25 +77,19 @@ public:
 
 	}
 
-	TcpConnection::pointer create()
-	{
-		return TcpConnection::pointer(new TcpConnection(this->io_context));
-	}
-
 	void startAccept()
 	{
-		auto pointer = create();
+        spdlog::info("server impl : startAccept");
 
-        spdlog::info("server impl : async_accept");
-		this->acceptor.async_accept(pointer->socket(), std::bind(&TcpServerImpl::acceptHandle, this, pointer));
+		TcpConnection* connection = new TcpConnection(this->io_context);
 
-        io_context.run();
+		this->acceptor.async_accept(connection->socket(), std::bind(&TcpServerImpl::acceptHandle, this, connection));
 	}
 
-	void acceptHandle(TcpConnection::pointer pointer)
+	void acceptHandle(TcpConnection* connection)
 	{
-		spdlog::info("server impl : acceptHandle");
-		pointer->start();
+		spdlog::info("server impl : acceptHandle connection ");
+		connection->start();
 
         startAccept();
 	}
@@ -88,7 +98,7 @@ private:
 	asio::io_context io_context;
 	asio::ip::tcp::acceptor acceptor;
 
-	std::unordered_map<std::string, TcpConnection::pointer> userList;
+	std::unordered_map<std::string, TcpConnection*> userList;
 };
 
 TcpServer::TcpServer(std::string serverHost, unsigned int serverPort)
@@ -108,6 +118,14 @@ void TcpServer::listen()
 
 void TcpServer::startAccept()
 {
-	impl->startAccept();
+	try
+	{
+		impl->startAccept();
+		impl->io_context.run();
+	}
+	catch (asio::error_code& e)
+	{
+		spdlog::info("server error : {}", e.message());
+	}
 }
 

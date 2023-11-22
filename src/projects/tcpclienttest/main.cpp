@@ -18,7 +18,11 @@ int main(int argc, char *argv[])
 
     TcpClient client(cf.value("serverIp").toString(), cf.value("serverPort").toInt());
     client.connect();
-    client.sendMessage("helloooooooooopopopopop|p");
+
+    while (1)
+    {
+        client.sendMessage("helloooooooooopopopopop|p");
+    }
 
     system("puse");
 
