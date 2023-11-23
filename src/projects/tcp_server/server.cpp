@@ -72,7 +72,7 @@ void TcpServer::startAccept()
 
 class TcpServerMultiImpl
 {
-	friend class TcpServer;
+	friend class TcpServerMulti;
 
 public:
 	TcpServerMultiImpl(unsigned int serverPort, size_t threadSize)
@@ -112,4 +112,23 @@ private:
 	size_t threadSize;
 };
 
+TcpServerMulti::TcpServerMulti(std::string serverHost, unsigned int serverPort)
+	:impl(new TcpServerMultiImpl(serverPort, serverPort)), serverHost(serverHost), serverPort(serverPort)
+{
+}
 
+TcpServerMulti::~TcpServerMulti()
+{
+	delete impl;
+}
+
+void TcpServerMulti::listen()
+{
+	startAccept();
+}
+
+void TcpServerMulti::startAccept()
+{
+	this->impl->startAccept();
+	this->impl->accept_io_context.run();
+}

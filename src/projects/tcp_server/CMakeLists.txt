@@ -7,6 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CLIENT_SRC
 	server.h
 	server.cpp
+	server_abstract.h
+	single_thread_server.h
+	single_thread_server.cpp
+	multi_thread_server.h
+	multi_thread_server.cpp
 	connection.hpp
 	threadpool.hpp
 )
