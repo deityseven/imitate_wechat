@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CLIENT_SRC
 	server.h
 	server.cpp
+	connection.hpp
+	threadpool.hpp
 )
 
 set(HANDLES_SRC

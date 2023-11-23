@@ -2,6 +2,7 @@
 #define TCP_CLIENT_H
 
 #include <string>
+#include <signalslot/Signal.hpp>
 
 class TcpClientImpl;
 
@@ -13,7 +14,14 @@ public:
 
     bool connect();
 
-    void sendMessage(const std::string data);
+    bool sendMessage(const std::string data);
+
+    void run();
+signals:
+    Gallant::Signal1<std::string> recvMessageSignal;
+
+private:
+    void recvMessage(std::string data);
 
 private:
     TcpClientImpl* impl;

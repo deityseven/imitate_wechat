@@ -23,4 +23,24 @@ private:
     TcpServerImpl* impl;
 };
 
+class TcpServerMultiImpl;
+
+class TcpServerMulti
+{
+public:
+    TcpServerMulti(std::string serverHost, unsigned int serverPort);
+    ~TcpServerMulti();
+
+    void listen();
+protected:
+    void startAccept();
+
+private:
+    std::string serverHost;
+    unsigned int serverPort;
+
+    TcpServerMultiImpl* impl;
+};
+
+
 #endif // !CONFIG_FILE_H

@@ -6,6 +6,13 @@
 #include <tcp_client/client.h>
 #include <spdlog/spdlog.h>
 #include <platform_define.h>
+#include <thread>
+#include <signalslot/Signal.hpp>
+
+void recv(std::string data)
+{
+    spdlog::info("recv: {}", data);
+}
 
 int main(int argc, char *argv[])
 {
@@ -17,13 +24,14 @@ int main(int argc, char *argv[])
     cf.beginSection("tcp");
 
     TcpClient client(cf.value("serverIp").toString(), cf.value("serverPort").toInt());
-    client.connect();
+    
+    client.recvMessageSignal.connect(recv);
+
+    if (!client.connect()) return -1;
 
     client.sendMessage("1234567890");
 
-    while (1)
-    {
-    }
+    client.run();
 
     system("puse");
 
