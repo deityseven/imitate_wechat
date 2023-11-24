@@ -1,6 +1,7 @@
 #ifndef TCP_SERVER_ABSTRACT_H
 #define TCP_SERVER_ABSTRACT_H
 
+#include <unordered_map>
 #include <string>
 #include <memory>
 #include <asio.hpp>
@@ -29,6 +30,8 @@ public:
 	{
 		std::string id = connection->recvWecharId();
 
+		spdlog::info("server impl : recv id: {}", id);
+
 		userList[id] = connection;
 
 		connection->start();
@@ -43,6 +46,5 @@ protected:
 public:
 	static std::unordered_map<std::string, TcpConnection*> userList;
 };
-
 
 #endif // !CONFIG_FILE_H

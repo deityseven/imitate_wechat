@@ -33,6 +33,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external/asio/include
 					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/external
+					${CMAKE_SOURCE_DIR}/src/projects/common
 					${CMAKE_SOURCE_DIR}/src/projects
 )
 
@@ -56,6 +57,8 @@ endif(WIN32)
 #链接静态库
 link_libraries(
     spdlog
+	common
+	util
 )
 
 if(WIN32)

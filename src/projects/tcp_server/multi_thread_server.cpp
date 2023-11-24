@@ -2,6 +2,8 @@
 #include "server_abstract.h"
 #include "threadpool.hpp"
 
+std::unordered_map<std::string, TcpConnection*> TcpServerAbstract::userList;
+
 class MultiThreadServerImpl : public TcpServerAbstract
 {
 	friend class MultiThreadServer;

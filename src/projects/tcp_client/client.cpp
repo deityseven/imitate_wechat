@@ -30,6 +30,8 @@ public:
 
     bool sendMessage(std::string data)
     {
+        spdlog::info("send: {}", data);
+
         size_t dataSize = data.size();
         size_t sendSize = this->socketObject.send(asio::buffer(data));
         if (sendSize == dataSize) return true;

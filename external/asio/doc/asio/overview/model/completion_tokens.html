@@ -30,11 +30,17 @@
           to customise the API surface of the library. By convention, the completion
           token is the final argument to an asynchronous operation's initiating function.
         </p>
+        <p>
+          Asio异步模型的一个关键目标是支持多种组合机制。这是通过一个完成令牌实现的，用户将其传递给异步操作的初始化函数，以自定义库的API表面。按照约定，完成令牌是异步操作初始化函数的最后一个参数。
+        </p>
 <p>
           For example, if the user passes a lambda (or other function object) as
           the completion token, the asynchronous operation behaves as previously
           described: the operation begins, and when the operation completes the result
           is passed to the lambda.
+        </p>
+        <p>
+          例如，如果用户传递lambda(或其他函数对象)作为完成标记，则异步操作的行为与前面描述的一样:操作开始，当操作完成时，结果传递给lambda。
         </p>
 <pre class="programlisting"><span class="identifier">socket</span><span class="special">.</span><span class="identifier">async_read_some</span><span class="special">(</span><span class="identifier">buffer</span><span class="special">,</span>
     <span class="special">[](</span><span class="identifier">error_code</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span>
@@ -49,6 +55,9 @@
           of a <code class="computeroutput"><span class="identifier">promise</span></code> and <code class="computeroutput"><span class="identifier">future</span></code> pair. The initiating function
           does not just launch the operation, but also returns a future that may
           be used to await the result.
+        </p>
+        <p>
+          当用户传递use_future完成令牌时，操作的行为就像在承诺和未来对方面实现的一样。初始化函数不仅启动操作，而且还返回可用于等待结果的future。
         </p>
 <pre class="programlisting"><span class="identifier">future</span><span class="special">&lt;</span><span class="identifier">size_t</span><span class="special">&gt;</span> <span class="identifier">f</span> <span class="special">=</span>
   <span class="identifier">socket</span><span class="special">.</span><span class="identifier">async_read_some</span><span class="special">(</span>

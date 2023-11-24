@@ -656,4 +656,5 @@ public:
 } // namespace
 
 #define signals public
+#define emit
 #endif //_SIGNAL_H_
