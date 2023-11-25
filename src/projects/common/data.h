@@ -8,6 +8,7 @@ class Data
 {
 public:
     Data(void);
+    Data(const char* data);
     Data(std::string data);
     Data(double data);
     Data(long data);

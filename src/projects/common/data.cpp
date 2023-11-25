@@ -9,6 +9,11 @@ Data::Data(void)
 {
 }
 
+Data::Data(const char* data)
+    :Data(std::string(data))
+{
+}
+
 Data::Data(std::string data)
     : Data()
 {
