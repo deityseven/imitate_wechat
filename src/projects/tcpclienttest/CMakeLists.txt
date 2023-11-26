@@ -42,6 +42,7 @@ link_libraries(
     configfile
     tcpclient
     spdlog
+	base64
 )
 
 if(WIN32)

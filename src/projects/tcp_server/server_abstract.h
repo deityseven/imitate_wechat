@@ -28,11 +28,11 @@ public:
 
 	void acceptHandle(TcpConnection* connection)
 	{
-		std::string id = connection->recvWecharId();
+		std::string id = connection->recvWechatId();
 
-		spdlog::info("server impl : recv id: {}", id);
+		spdlog::info("server impl : acceptHandle recv id: {}", id);
 
-		userList[id] = connection;
+		connection->connected();
 
 		connection->start();
 
@@ -42,9 +42,6 @@ public:
 protected:
 	asio::io_context io_context;
 	asio::ip::tcp::acceptor acceptor;
-
-public:
-	static std::unordered_map<std::string, TcpConnection*> userList;
 };
 
 #endif // !CONFIG_FILE_H

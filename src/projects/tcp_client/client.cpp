@@ -8,7 +8,7 @@ class TcpClientImpl
     friend class TcpClient;
 public:
     TcpClientImpl(std::string serverHost, unsigned int serverPort)
-        :socketObject(io_context), worker(io_context), serverHost(serverHost), serverPort(serverPort), bufferSize(4096)
+        :socketObject(io_context), worker(io_context), serverHost(serverHost), serverPort(serverPort), bufferSize(4096), buff(new char[bufferSize])
     {
         spdlog::info("serverHost: {} port: {}", serverHost, serverPort);
     }
@@ -32,6 +32,7 @@ public:
     {
         spdlog::info("send: {}", data);
 
+        data += "|";
         size_t dataSize = data.size();
         size_t sendSize = this->socketObject.send(asio::buffer(data));
         if (sendSize == dataSize) return true;
@@ -45,16 +46,17 @@ public:
 
     bool recvMessageCompletionCondition()
     {
-        return buff.find('|') != std::string::npos;
+        std::string temp(buff);
+
+        return temp.find('|') != std::string::npos;
     }
 
     void recvMessage()
     {
-        buff.clear();
-        buff.resize(this->bufferSize);
+        memset(this->buff, 0, this->bufferSize);
 
         asio::async_read(this->socketObject, 
-            asio::buffer(buff), 
+            asio::buffer(this->buff, this->bufferSize),
             std::bind(&TcpClientImpl::recvMessageCompletionCondition, this),
             std::bind(&TcpClientImpl::receivedMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
@@ -63,7 +65,7 @@ public:
     {
         spdlog::info("ec.value: {} size: {}", ec.value(), size);
 
-        if (ec == asio::error::eof)
+        if (ec)
         {
             spdlog::info("socket disconnect");
             socketObject.shutdown(asio::socket_base::shutdown_type::shutdown_both);
@@ -72,15 +74,21 @@ public:
 
         if (size != 0)
         {
-            this->data += this->buff;
+            std::string temp(this->buff);
+            this->data += temp;
 
             auto pos = this->data.find('|');
-            recvMessageSignal(std::string(this->data.begin() ,this->data.begin() + pos));
 
-            std::string temp = std::string(std::string(this->data.begin() + pos, this->data.end()));
-            this->data = temp;
+            std::string msg(this->data.begin(), this->data.begin() + pos);
 
-            
+            emit recvMessageSignal(msg);
+
+            if (pos == (this->data.size() - 1)) this->data.clear();
+            else
+            {
+                std::string temp(this->data.begin() + pos + 1, this->data.end());
+                this->data = temp;
+            }
         }
 
         recvMessage();
@@ -97,7 +105,7 @@ private:
     asio::ip::tcp::socket socketObject;
 
     const size_t bufferSize;
-    std::string buff;
+    char* buff;
     std::string data;
 };
 
@@ -124,10 +132,11 @@ bool TcpClient::sendMessage(std::string data)
 
 void TcpClient::run()
 {
-    this->impl->io_context.run();
+    //this->impl->io_context.run();
+    this->impl->io_context.run_one();
 }
 
 void TcpClient::recvMessage(std::string data)
 {
-    recvMessageSignal(data);
+    emit recvMessageSignal(data);
 }

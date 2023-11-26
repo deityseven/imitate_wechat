@@ -29,7 +29,7 @@ public:
 
 	void acceptHandle(TcpConnection* connection)
 	{
-		std::string id = connection->recvWecharId();
+		std::string id = connection->recvWechatId();
 		
 		spdlog::info("connection recv : id: {}", id);
 		
@@ -94,7 +94,7 @@ public:
 
 	void acceptHandle(TcpConnection* connection)
 	{
-		std::string id = connection->recvWecharId();
+		std::string id = connection->recvWechatId();
 
 		spdlog::info("connection recv : id: {}", id);
 

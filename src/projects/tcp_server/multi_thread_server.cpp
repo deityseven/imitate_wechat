@@ -1,12 +1,15 @@
 #include "multi_thread_server.h"
 #include "server_abstract.h"
 #include "threadpool.hpp"
-
-std::unordered_map<std::string, TcpConnection*> TcpServerAbstract::userList;
+#include "connection.hpp"
 
 class MultiThreadServerImpl : public TcpServerAbstract
 {
 	friend class MultiThreadServer;
+
+signals:
+	Gallant::Signal1<TcpConnection*> newConnectionSignal;
+	Gallant::Signal1<TcpConnection*> disconnectionSignal;
 
 public:
 	MultiThreadServerImpl(unsigned int serverPort, size_t threadSize)
@@ -17,8 +20,29 @@ public:
 
 	virtual TcpConnection* getConnection() override
 	{
-		return threadPool.getNewConnection();
+		TcpConnection* connection = threadPool.getNewConnection();
+
+		connection->disconnectSignal.connect(this, &MultiThreadServerImpl::disconnection);
+		connection->connectedSignal.connect(this, &MultiThreadServerImpl::newConnection);
+
+		return connection;
 	}
+
+private:
+	void newConnection(TcpConnection* connection)
+	{
+		spdlog::info("SingleThreadServerImpl newConnection");
+		emit newConnectionSignal(connection);
+	}
+
+	void disconnection(TcpConnection* connection, asio::error_code ec)
+	{
+		spdlog::info("SingleThreadServerImpl disconnection");
+		this->ec = ec;
+		emit disconnectionSignal(connection);
+	}
+
+	asio::error_code ec;
 
 	ThreadPool threadPool;
 	size_t threadSize;
@@ -30,6 +54,8 @@ MultiThreadServer::MultiThreadServer(std::string serverHost, unsigned int server
 	serverHost(serverHost),
 	serverPort(serverPort)
 {
+	this->impl->newConnectionSignal.connect(this, &MultiThreadServer::newConnection);
+	this->impl->disconnectionSignal.connect(this, &MultiThreadServer::disconnection);
 }
 
 MultiThreadServer::~MultiThreadServer()
@@ -39,6 +65,24 @@ MultiThreadServer::~MultiThreadServer()
 
 void MultiThreadServer::run()
 {
+	this->impl->threadPool.start();
 	this->impl->startAccept();
 	this->impl->io_context.run();
+}
+
+std::string MultiThreadServer::getCurrentError()
+{
+	return this->impl->ec.message();
+}
+
+void MultiThreadServer::newConnection(TcpConnection* connection)
+{
+	spdlog::info("SingleThreadServer newConnection");
+	emit newConnectionSignal(connection);
+}
+
+void MultiThreadServer::disconnection(TcpConnection* connection)
+{
+	spdlog::info("SingleThreadServer disconnection");
+	emit disconnectionSignal(connection);
 }

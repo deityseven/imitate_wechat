@@ -18,6 +18,7 @@ source_group(main FILES ${MAIN_SRC})
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
+					${CMAKE_SOURCE_DIR}/external/asio/include
 					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/src/projects
 					${CMAKE_SOURCE_DIR}/src/projects/common
@@ -42,6 +43,7 @@ link_libraries(
     configfile
     tcpserver
     spdlog
+	base64
 )
 
 if(WIN32)

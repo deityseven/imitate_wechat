@@ -10,14 +10,14 @@
 class TcpConnection
 {
 signals:
+	Gallant::Signal1<TcpConnection*> connectedSignal;
 	Gallant::Signal2<TcpConnection*, asio::error_code> disconnectSignal;
 	Gallant::Signal1<std::string> receiveMessageSignal;
 
 public:
 	TcpConnection(asio::io_context& io_context)
-		:socketObject(io_context), bufferSize(4096)
+		:socketObject(io_context), bufferSize(4096), buff(new char[bufferSize])
 	{
-		buff.reserve(bufferSize);
 	}
 
 	~TcpConnection()
@@ -32,6 +32,7 @@ public:
 	void sendMessage(const std::string data)
 	{
 		this->sendMessageData = data;
+		this->sendMessageData += "|";
 		asio::async_write(this->socketObject, asio::buffer(this->sendMessageData), std::bind(&TcpConnection::sendSuccess, this, std::placeholders::_1, std::placeholders::_2));
 	}
 
@@ -50,20 +51,25 @@ public:
 		}
 	}
 
-	std::string recvWecharId()
+	std::string recvWechatId()
 	{
-		wechatId.resize(10);
+		wechatId.resize(11);
 		this->socketObject.receive(asio::buffer(wechatId));
+		wechatId.pop_back();
 		return wechatId;
+	}
+
+	std::string getWechatId()
+	{
+		return this->wechatId;
 	}
 
 	void start()
 	{
-		buff.clear();
-		buff.resize(this->bufferSize);
+		memset(this->buff, 0, this->bufferSize);
 
 		asio::async_read(this->socketObject,
-			asio::buffer(buff),
+			asio::buffer(buff, this->bufferSize),
 			std::bind(&TcpConnection::completionCondition, this, std::placeholders::_1, std::placeholders::_2),
 			std::bind(&TcpConnection::readSuccess, this, std::placeholders::_1, std::placeholders::_2));
 	}
@@ -72,7 +78,8 @@ public:
 	{
 		if (ec) return true;
 
-		auto pos = buff.find('|');
+		std::string temp(buff);
+		size_t pos = temp.find('|');
 		return pos != std::string::npos;
 	}
 
@@ -87,19 +94,17 @@ public:
 
 		if (size != 0)
 		{
-			this->message += buff;
-			spdlog::info("socket recv: {}", this->buff);
+			std::string temp(buff);
+
+			this->message += temp;
 
 			size_t pos = this->message.rfind('|');
 			std::string data(this->message.begin(), this->message.begin() + pos);
 
-			spdlog::info("data: {}", data);
-
 			auto list = StringUtil::split(data, '|');
-			for (auto& item : list)
+			for (auto item : list)
 			{
 				emit receiveMessageSignal(item);
-				spdlog::info("emit signal: {}", item);
 			}
 
 			if (pos == (this->message.size() - 1)) this->message.clear();
@@ -108,16 +113,17 @@ public:
 				std::string temp(this->message.begin() + pos + 1, this->message.end());
 				this->message = temp;
 			}
-			
-			spdlog::info("message: {}", message);
-
-			emit receiveMessageSignal(data);
 		}
 
 		if (this->socketObject.is_open())
 		{
 			start();
 		}
+	}
+
+	void connected()
+	{
+		emit connectedSignal(this);
 	}
 
 	void disconnect(asio::error_code ec = asio::error_code())
@@ -131,7 +137,7 @@ public:
 private:
 	asio::ip::tcp::socket socketObject;
 	const size_t bufferSize;
-	std::string buff;
+	char* buff;
 	std::string message;
 	std::string sendMessageData;
 	std::string wechatId;

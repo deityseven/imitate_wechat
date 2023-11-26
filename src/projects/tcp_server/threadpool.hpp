@@ -21,6 +21,9 @@ public:
 		works.push_back(work);
 
 		context->run();
+
+		delete context;
+		delete work;
 	}
 
 	void start()
@@ -30,6 +33,11 @@ public:
 			this->workers.emplace_back(
 				std::bind(&ThreadPool::threadRun, this)
 			);
+
+			while (this->io_contexts.size() != (i + 1))
+			{
+				std::this_thread::sleep_for(std::chrono::microseconds(20));
+			}
 		}
 	}
 
