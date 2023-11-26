@@ -7,6 +7,7 @@ class MysqlInsertSet : public MysqlSet
 {
 public:
 	MysqlInsertSet();
+	MysqlInsertSet(std::vector<std::string> fieldName, std::vector<std::vector<Data>> data);
 	~MysqlInsertSet();
 
 };

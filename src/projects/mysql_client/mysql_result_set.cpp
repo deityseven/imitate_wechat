@@ -11,6 +11,8 @@ MysqlResultSet::MysqlResultSet(MYSQL_RES* mysql_res)
 	size_t rows = mysql_num_rows(mysql_res);
 	size_t cols = mysql_num_fields(mysql_res);
 
+	setTableName(mysql_res->fields->table);
+
 	std::string returnContent;
 	for (int i = 0; i < cols; ++i)
 	{

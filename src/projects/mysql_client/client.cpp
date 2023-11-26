@@ -63,9 +63,53 @@ void MysqlClient::disconnect()
 	this->mysql = nullptr;
 }
 
-MysqlResultSet MysqlClient::query(std::string sqlstr)
+bool MysqlClient::insert(MysqlInsertSet data)
 {
-	int flag = mysql_query(this->mysql, sqlstr.c_str());
+	mysql_set_server_option(this->mysql, MYSQL_OPTION_MULTI_STATEMENTS_ON);
+
+	std::string tableName = data.getTableName();
+
+	std::string fieldNames = data.buildFieldNameString();
+
+	std::string values;
+
+	std::string allSql;
+	for (size_t i = 0; i < data.rowSize(); ++i)
+	{
+		values = data.buildRowDataString(i);
+		static char buf[4096];
+		memset(buf, 0, 4096);
+		sprintf(buf, "insert into %s(%s) values (%s);", tableName.c_str(), fieldNames.c_str(), values.c_str());
+
+		allSql += buf;
+	}
+
+	int flag = mysql_query(this->mysql, allSql.c_str());
+
+	mysql_set_server_option(this->mysql, MYSQL_OPTION_MULTI_STATEMENTS_OFF);
+
+	return flag == 0;
+}
+
+bool MysqlClient::deleter(MysqlDeleteSet data)
+{
+	std::string tableName = data.getTableName();
+
+	std::string whereString = data.buildWhereString();
+
+	static char buf[4096];
+	memset(buf, 0, 4096);
+	sprintf(buf, "delete from %s %s;", tableName.c_str(), whereString.c_str());
+
+	std::string sql(buf);
+	int flag = mysql_query(this->mysql, sql.c_str());
+
+	return flag == 0;
+}
+
+MysqlResultSet MysqlClient::query(std::string querySql)
+{
+	int flag = mysql_query(this->mysql, querySql.c_str());
 
 	if (flag != 0)
 	{

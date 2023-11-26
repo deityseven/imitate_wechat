@@ -3,6 +3,8 @@
 
 #include <string>
 #include "mysql_result_set.h"
+#include "mysql_insert_set.h"
+#include "mysql_delete_set.h"
 
 class MYSQL;
 
@@ -15,7 +17,9 @@ public:
     bool connect(std::string serverHost, unsigned int serverPort, std::string db, std::string user, std::string passwd);
     void disconnect();
 
-    MysqlResultSet query(std::string sqlstr);
+    bool insert(MysqlInsertSet data);
+    bool deleter(MysqlDeleteSet data);
+    MysqlResultSet query(std::string querySql);
 
 private:
     std::string serverHost;

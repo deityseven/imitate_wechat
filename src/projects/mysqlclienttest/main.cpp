@@ -35,10 +35,15 @@ int main(int argc, char *argv[])
         spdlog::info("flag: false");
     }
 
-    auto set = client.query("select * from config;");
+    MysqlDeleteSet deleted;
+    deleted.setTableName("config");
+    deleted.appendFieldName("key");
+    std::vector<Data> row;
+    row.push_back("insertKey0");
+    deleted.appendRow(row);
+    deleted.appendWhereCondition("=");
 
-    std::cout << set[1][2].toString() << std::endl;
-
+    client.deleter(deleted);
     system("pause");
 
     return 0;

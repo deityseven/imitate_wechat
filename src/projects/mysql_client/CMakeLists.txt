@@ -14,6 +14,8 @@ set(CLIENT_SRC
 	mysql_result_set.cpp
 	mysql_insert_set.h
 	mysql_insert_set.cpp
+	mysql_delete_set.h
+	mysql_delete_set.cpp
 )
 
 set(SRCS 
