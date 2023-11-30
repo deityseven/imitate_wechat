@@ -25,9 +25,11 @@
         This tutorial program shows how to use asio to implement a client application
         with TCP.
       </p>
+<p> 译:这个教程程序展示了如何使用asio实现带有TCP的客户机应用程序。</p>
 <p>
         We start by including the necessary header files.
       </p>
+<p>译:我们从包含必要的头文件开始。</p>
 <pre class="programlisting"><span class="special">#</span><span class="identifier">include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="special">#</span><span class="identifier">include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="special">#</span><span class="identifier">include</span> <span class="special">&lt;</span><span class="identifier">asio</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -36,6 +38,7 @@
         The purpose of this application is to access a daytime service, so we need
         the user to specify the server.
       </p>
+<p>译:此应用程序的目的是访问日间服务，因此我们需要用户指定服务器。</p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">asio</span><span class="special">::</span><span class="identifier">ip</span><span class="special">::</span><span class="identifier">tcp</span><span class="special">;</span>
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span>
@@ -52,6 +55,7 @@
         All programs that use asio need to have at least one I/O execution context,
         such as an <a class="link" href="../reference/io_context.html" title="io_context">io_context</a> object.
       </p>
+<p>译:所有使用asio的程序都需要至少有一个I/O执行上下文，比如io_context对象。</p>
 <pre class="programlisting">    <span class="identifier">asio</span><span class="special">::</span><span class="identifier">io_context</span> <span class="identifier">io_context</span><span class="special">;</span>
 </pre>
 <p>
@@ -59,6 +63,7 @@
         application, into a TCP endpoint. To do this we use an <a class="link" href="../reference/ip__tcp/resolver.html" title="ip::tcp::resolver">ip::tcp::resolver</a>
         object.
       </p>
+<p>译:我们需要将指定为应用程序参数的服务器名转换为TCP端点。为此，我们使用ip::tcp::resolver对象。</p>
 <pre class="programlisting">    <span class="identifier">tcp</span><span class="special">::</span><span class="identifier">resolver</span> <span class="identifier">resolver</span><span class="special">(</span><span class="identifier">io_context</span><span class="special">);</span>
 </pre>
 <p>
@@ -67,11 +72,13 @@
         in <code class="computeroutput"><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">]</span></code>, and the
         name of the service, in this case <code class="computeroutput"><span class="string">"daytime"</span></code>.
       </p>
+<p>译:解析器接受主机名和服务名，并将它们转换为端点列表。我们使用服务器的名称(在argv[1]中指定)和服务的名称(在本例中为“daytime”)执行解析调用。</p>
 <p>
         The list of endpoints is returned using an object of type <a class="link" href="../reference/ip__basic_resolver/results_type.html" title="ip::basic_resolver::results_type">ip::tcp::resolver::results_type</a>.
         This object is a range, with begin() and end() member functions that may
         be used for iterating over the results.
       </p>
+<p>译:端点列表使用ip::tcp::resolver::results_type类型的对象返回。该对象是一个范围，具有begin()和end()成员函数，可用于对结果进行迭代。</p>
 <pre class="programlisting">    <span class="identifier">tcp</span><span class="special">::</span><span class="identifier">resolver</span><span class="special">::</span><span class="identifier">results_type</span> <span class="identifier">endpoints</span> <span class="special">=</span>
       <span class="identifier">resolver</span><span class="special">.</span><span class="identifier">resolve</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">],</span> <span class="string">"daytime"</span><span class="special">);</span>
 </pre>
@@ -81,6 +88,7 @@
         until we find one that works. This keeps the client program independent of
         a specific IP version. The asio::connect() function does this for us automatically.
       </p>
+<p>译:现在我们创建并连接套接字。上面获得的端点列表可能包含IPv4和IPv6端点，因此我们需要尝试每一个端点，直到找到一个有效的端点。这使客户端程序独立于特定的IP版本。asio::connect()函数会自动为我们完成这些工作。</p>
 <pre class="programlisting">    <span class="identifier">tcp</span><span class="special">::</span><span class="identifier">socket</span> <span class="identifier">socket</span><span class="special">(</span><span class="identifier">io_context</span><span class="special">);</span>
     <span class="identifier">asio</span><span class="special">::</span><span class="identifier">connect</span><span class="special">(</span><span class="identifier">socket</span><span class="special">,</span> <span class="identifier">endpoints</span><span class="special">);</span>
 </pre>
@@ -88,6 +96,7 @@
         The connection is open. All we need to do now is read the response from the
         daytime service.
       </p>
+<p>译:连接已打开。现在我们需要做的就是读取来自日间服务的响应。</p>
 <p>
         We use a <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code> to hold the received data. The asio::buffer()
         function automatically determines the size of the array to help prevent buffer
@@ -95,6 +104,7 @@
         we could have used a <code class="computeroutput"><span class="keyword">char</span> <span class="special">[]</span></code>
         or <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span></code>.
       </p>
+<p>译:我们使用boost::数组保存接收到的数据。asio::buffer()函数自动确定数组的大小，以帮助防止缓冲区溢出。我们可以使用char[]或std::vector来代替boost::array。</p>
 <pre class="programlisting">    <span class="keyword">for</span> <span class="special">(;;)</span>
     <span class="special">{</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="number">128</span><span class="special">&gt;</span> <span class="identifier">buf</span><span class="special">;</span>
@@ -107,6 +117,7 @@
         function will exit with the asio::error::eof error, which is how we know
         to exit the loop.
       </p>
+<p>译:当服务器关闭连接时，ip::tcp::socket::read_some()函数将退出并返回asio::error::eof错误，这就是我们知道退出循环的方式。</p>
 <pre class="programlisting">      <span class="keyword">if</span> <span class="special">(</span><span class="identifier">error</span> <span class="special">==</span> <span class="identifier">asio</span><span class="special">::</span><span class="identifier">error</span><span class="special">::</span><span class="identifier">eof</span><span class="special">)</span>
         <span class="keyword">break</span><span class="special">;</span> <span class="comment">// Connection closed cleanly by peer.</span>
       <span class="keyword">else</span> <span class="keyword">if</span> <span class="special">(</span><span class="identifier">error</span><span class="special">)</span>
@@ -118,6 +129,7 @@
 <p>
         Finally, handle any exceptions that may have been thrown.
       </p>
+<p>译:最后，处理可能已经抛出的任何异常。</p>
 <pre class="programlisting">  <span class="special">}</span>
   <span class="keyword">catch</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
   <span class="special">{</span>
@@ -127,13 +139,18 @@
 <p>
         See the <a class="link" href="tutdaytime1/src.html" title="Source listing for Daytime.1">full source listing</a>
       </p>
+<p>译:请参阅完整的源代码清单</p>
 <p>
         Return to the <a class="link" href="../tutorial.html" title="Tutorial">tutorial index</a>
       </p>
+<p>译:回到教程索引</p>
+
 <p>
         Next: <a class="link" href="tutdaytime2.html" title="Daytime.2 - A synchronous TCP daytime server">Daytime.2 - A synchronous
         TCP daytime server</a>
       </p>
+<p>译:下一个:daytime .2 -一个同步的TCP日间服务器</p>
+
 </div>
 <div class="copyright-footer">Copyright © 2003-2023 Christopher M. Kohlhoff<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
