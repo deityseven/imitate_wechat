@@ -13,9 +13,9 @@ public:
 	std::string getTableName();
 	//新增字段名
 	void appendFieldName(std::string fieldName);
-	//新增字段名
+	//新增条件
 	void appendWhereCondition(std::string condition);
-	//访问数据集
+	//获取所有字段名
 	const std::vector<std::string>& getFieldName();
 	std::string buildFieldNameString();
 	std::string buildRowDataString(size_t row);
