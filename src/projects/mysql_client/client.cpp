@@ -56,7 +56,7 @@ bool MysqlClient::connect(std::string serverHost, unsigned int serverPort, std::
 
 void MysqlClient::disconnect()
 {
-	mysql_shutdown(this->mysql, KILL_CONNECTION);
+	mysql_close(this->mysql);
 
 	delete this->mysql;
 
