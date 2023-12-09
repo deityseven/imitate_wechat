@@ -1,6 +1,7 @@
 #include "client.h"
 #include <mysql.h>
 #include <spdlog/spdlog.h>
+#include <iostream>
 
 MysqlClient::MysqlClient()
 	:mysql(nullptr)
@@ -42,6 +43,7 @@ bool MysqlClient::connect(std::string serverHost, unsigned int serverPort, std::
 	if (returnPtr == nullptr)
 	{
 		spdlog::error("mysql_real_connect return nullptr");
+		spdlog::error(mysql_error(this->mysql));
 		return false;
 	}
 
@@ -107,8 +109,18 @@ bool MysqlClient::deleter(MysqlDeleteSet data)
 	return flag == 0;
 }
 
-MysqlResultSet MysqlClient::query(std::string querySql)
+MysqlResultSet MysqlClient::query(MysqlQuerySet data)
 {
+	std::string tableName = data.getTableName();
+	std::string queryFieldName = data.buildQueryFieldName();
+	std::string whereString = data.buildWhereString();
+	std::string sortString = data.buildSortString();
+
+	static char buf[4096];
+	memset(buf, 0, 4096);
+	sprintf(buf, "select %s from %s %s %s;", queryFieldName.c_str(), tableName.c_str(), whereString.c_str(), sortString.c_str());
+
+	std::string querySql(buf);
 	int flag = mysql_query(this->mysql, querySql.c_str());
 
 	if (flag != 0)
@@ -123,4 +135,20 @@ MysqlResultSet MysqlClient::query(std::string querySql)
 	mysql_free_result(mysql_res);
 
 	return std::move(result);
+}
+
+bool MysqlClient::updater(MysqlUpdateSet data)
+{
+	std::string tableName = data.getTableName();
+	std::string setStr = data.buildSetValueString();
+	std::string whereString = data.buildWhereString();
+
+	static char buf[4096];
+	memset(buf, 0, 4096);
+	sprintf(buf, "update %s set %s %s;", tableName.c_str(), setStr.c_str(), whereString.c_str());
+
+	std::string updateSql(buf);
+	int flag = mysql_query(this->mysql, updateSql.c_str());
+
+	return flag == 0;
 }
