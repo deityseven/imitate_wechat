@@ -4,6 +4,10 @@ project(util)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(RANDOM_SRC
+    random_util.hpp
+)
+
 set(PLATFORM_SRC
     platform_util.h
     platform_util.cpp
@@ -24,6 +28,7 @@ set(THREAD_SRC
 )
 
 set(SRCS
+	${RANDOM_SRC}
 	${THREAD_SRC}
 	${STRING_SRC}
 	${PLATFORM_SRC}
@@ -31,6 +36,7 @@ set(SRCS
 )
 
 #筛选显示
+source_group(random FILES ${RANDOM_SRC})
 source_group(thread FILES ${THREAD_SRC})
 source_group(string FILES ${STRING_SRC})
 source_group(platform FILES ${PLATFORM_SRC})
