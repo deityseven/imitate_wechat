@@ -5,6 +5,8 @@
 #include "mysql_result_set.h"
 #include "mysql_insert_set.h"
 #include "mysql_delete_set.h"
+#include "mysql_query_set.h"
+#include "mysql_update_set.h"
 
 class MYSQL;
 
@@ -19,7 +21,9 @@ public:
 
     bool insert(MysqlInsertSet data);
     bool deleter(MysqlDeleteSet data);
-    MysqlResultSet query(std::string querySql);
+    MysqlResultSet query(MysqlQuerySet data);
+    bool updater(MysqlUpdateSet data);
+
 
 private:
     std::string serverHost;

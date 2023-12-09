@@ -1,5 +1,6 @@
 #include "data.h"
 #include <climits>
+#include <ctype.h>
 
 Data::Data(void)
     :typeInfo(std::type_index(typeid(void))),
@@ -47,15 +48,20 @@ Data::Data(std::string data)
     }
     else
     {
-        try
+        bool isdigitFlag = true;
+        for (auto& ch : this->stringData)
+        {
+            if (ch < -1 || ch > 255 || isdigit(ch) == 0 || isxdigit(ch) == 0)
+            {
+                isdigitFlag = false;
+                break;
+            }
+        }
+
+        if (isdigitFlag == true)
         {
             this->longData = std::stol(this->stringData);
             this->typeInfo = std::type_index(typeid(long));
-            return;
-        }
-        catch (...)
-        {
-
         }
     }
 }

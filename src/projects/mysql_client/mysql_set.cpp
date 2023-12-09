@@ -16,14 +16,73 @@ void MysqlSet::appendFieldName(std::string fieldName)
 	this->fieldName.emplace_back(std::move(fieldName));
 }
 
+void MysqlSet::appendUpdateFieldName(std::string updateFieldName)
+{
+	this->updateFieldName.emplace_back(std::move(updateFieldName));
+}
+
 void MysqlSet::appendWhereCondition(std::string condition)
 {
 	this->whereCondition.emplace_back(std::move(condition));
 }
 
-const std::vector<std::string>& MysqlSet::getFieldName()
+void MysqlSet::setSortType(SortType sortType)
 {
-	return this->fieldName;
+	this->sortType = sortType;
+}
+
+void MysqlSet::setSortFieldName(std::string sortFieldName)
+{
+	this->sortFieldName = sortFieldName;
+}
+
+void MysqlSet::appendQueryFieldName(std::string queryFieldName)
+{
+	this->queryFieldName.emplace_back(std::move(queryFieldName));
+}
+
+std::string MysqlSet::buildQueryFieldName()
+{
+	std::string result;
+
+	for (auto item : this->queryFieldName)
+	{
+		if (item == "*")
+		{
+			result += item;
+			return std::move(result);
+		}
+		else
+		{
+			result.push_back('`');
+			result += item;
+			result.push_back('`');
+			result.push_back(',');
+		}
+	}
+	result.pop_back();
+
+	return std::move(result);
+}
+
+std::string MysqlSet::buildSortString()
+{
+	std::string orderByString("ORDER BY");
+	orderByString.push_back(' ');
+	orderByString.push_back('`');
+	orderByString += this->sortFieldName;
+	orderByString.push_back('`');
+	orderByString.push_back(' ');
+	if (this->sortType == SortType::ASC)
+	{
+		orderByString += "ASC";
+	}
+	else 
+	{
+		orderByString += "DESC";
+	}
+
+	return std::move(orderByString);
 }
 
 std::string MysqlSet::buildFieldNameString()
@@ -77,8 +136,10 @@ std::string MysqlSet::buildWhereString()
 		conditionString.push_back('`');
 		conditionString += this->fieldName[i];
 		conditionString.push_back('`');
-		conditionString.push_back('=');
-
+		conditionString.push_back(' ');
+		conditionString += this->whereCondition[i];
+		conditionString.push_back(' ');
+		
 		Data& t = this->datas[0][i];
 		if (t.isType<std::string>())
 		{
@@ -88,12 +149,45 @@ std::string MysqlSet::buildWhereString()
 		}
 		else
 			conditionString += t.toString();
+
+		conditionString.push_back(',');
 	}
+
+	conditionString.pop_back();
 
 	if (conditionString.empty())
 		return std::string();
 	else
 		return whereString + conditionString;
+}
+
+std::string MysqlSet::buildSetValueString()
+{
+	std::string setStr;
+	for (size_t i = 0; i < this->updateFieldName.size(); ++i)
+	{
+		setStr.push_back('`');
+		setStr += this->updateFieldName[i];
+		setStr.push_back('`');
+		setStr.push_back(' ');
+		setStr.push_back('=');
+		setStr.push_back(' ');
+
+		Data& t = this->updateDatas[i];
+		if (t.isType<std::string>())
+		{
+			setStr.push_back('\"');
+			setStr += t.toString();
+			setStr.push_back('\"');
+		}
+		else
+			setStr += t.toString();
+
+		setStr.push_back(',');
+	}
+	setStr.pop_back();
+
+	return std::move(setStr);
 }
 
 size_t MysqlSet::rowSize()
@@ -131,4 +225,11 @@ void MysqlSet::appendRow(const std::vector<Data>& row)
 	if (row.size() != this->fieldName.size()) throw std::out_of_range("row param size != field size");
 
 	this->datas.push_back(row);
+}
+
+void MysqlSet::appendUpdateRow(const std::vector<Data>& updateRow)
+{
+	if (updateRow.size() != this->updateFieldName.size()) throw std::out_of_range("row param size != field size");
+
+	this->updateDatas = updateRow;
 }
