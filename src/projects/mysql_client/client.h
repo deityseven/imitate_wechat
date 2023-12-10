@@ -22,8 +22,7 @@ public:
     bool insert(MysqlInsertSet data);
     bool deleter(MysqlDeleteSet data);
     MysqlResultSet query(MysqlQuerySet data);
-    bool updater(MysqlUpdateSet data);
-
+    bool update(MysqlUpdateSet data);
 
 private:
     std::string serverHost;
