@@ -6,7 +6,7 @@
 #include <list>
 
 class HttpClient;
-
+//微信客户端
 class WeChatClient
 {
 public:
