@@ -49,6 +49,8 @@ link_libraries(
     httpserver
     configfile
     spdlog
+	mysqlclient
+	libmysql
 )
 
 add_executable(${PROJECT_NAME} ${SRCS})
@@ -58,4 +60,5 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_ENVIRONMENT "Path=$(Pat
 
 #链接动态库
 target_link_libraries(${PROJECT_NAME}
+	libmysql
 )

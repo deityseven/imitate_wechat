@@ -13,4 +13,6 @@ public:
     static std::string eliminate(const std::string src, const char ch);
     //将src字符串中的所有字串chr剔除
     static std::string eliminate(const std::string src, const std::string chr);
+    //生成10位随机字符，a-zA-Z0-9
+
 };

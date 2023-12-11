@@ -15,6 +15,8 @@ set(HANDLES_SRC
 	./handels/server_online.cpp
 	./handels/account_verify.h
 	./handels/account_verify.cpp
+	./handels/account_unique_check.h
+	./handels/account_unique_check.cpp
 )
 
 set(SRCS 
@@ -30,6 +32,7 @@ source_group(handles FILES ${HANDLES_SRC})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/external/spdlog/include
+					${CMAKE_SOURCE_DIR}/src/projects/common
 					${CMAKE_SOURCE_DIR}/src/projects
 )
 
@@ -49,6 +52,8 @@ endif(WIN32)
 #链接静态库
 link_libraries(
     spdlog
+	mysqlclient
+	common
 )
 
 if(WIN32)

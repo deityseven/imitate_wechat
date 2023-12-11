@@ -67,6 +67,8 @@ std::string MysqlSet::buildQueryFieldName()
 
 std::string MysqlSet::buildSortString()
 {
+	if (this->sortFieldName.empty()) return std::string();
+
 	std::string orderByString("ORDER BY");
 	orderByString.push_back(' ');
 	orderByString.push_back('`');

@@ -54,3 +54,29 @@ void HttpClient::setWriteTimeout(unsigned int millisecond)
 {
     this->client->set_write_timeout(0, millisecond);
 }
+
+bool HttpClient::accountUniqueCheck(std::string userName)
+{
+    nlohmann::json root;
+    nlohmann::json data;
+    data["user_name"] = userName;
+    root["data"] = data;
+
+    httplib::Params param;
+    param.insert(std::make_pair("data", data.dump()));
+    auto result = this->client->Post("/api/accountUniqueCheck", param);
+    if (result && result->status == 200)
+    {
+        std::string response = result->body;
+
+        auto responseJson = nlohmann::json::parse(response);
+
+        auto statuJson = responseJson["statu"];
+        if (!statuJson.is_null())
+        {
+            return statuJson.get<bool>();
+        }
+    }
+
+    return false;
+}

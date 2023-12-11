@@ -20,9 +20,10 @@ source_group(client FILES ${CLIENT_SRC})
 
 #包含目录
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
-					${CMAKE_SOURCE_DIR}/external
-					${CMAKE_SOURCE_DIR}/src/projects
+					${CMAKE_SOURCE_DIR}/external/spdlog/include
 					${CMAKE_SOURCE_DIR}/src/projects/common
+					${CMAKE_SOURCE_DIR}/src/projects
+					${CMAKE_SOURCE_DIR}/external
 )
 
 #库目录
@@ -42,6 +43,7 @@ endif(WIN32)
 link_libraries(
     common
     httpclient
+	spdlog
     configfile
 )
 

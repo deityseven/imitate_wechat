@@ -16,6 +16,9 @@ public:
 
     //服务器在线
     bool serverOnline();
+    //帐号唯一检查
+    bool accountUniqueCheck(std::string userName);
+
     //获取用户信息
     //参数：userInfo 账户信息json数据
     //参数：response 服务器响应 检查通过response存储该账户所有信息 不通过存储异常信息

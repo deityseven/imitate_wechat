@@ -3,6 +3,7 @@
 #include <http_client/client.h>
 #include <common/data.h>
 #include <configfile/config_file.h>
+#include <spdlog/spdlog.h>
 
 WeChatClient::WeChatClient()
     :httpClient(nullptr),
@@ -19,6 +20,20 @@ WeChatClient::~WeChatClient()
 bool WeChatClient::checkServerOnline()
 {
     return this->httpClient->serverOnline();
+}
+
+bool WeChatClient::registerAccount(std::string userName, std::string password)
+{
+    if (this->httpClient->accountUniqueCheck(userName))
+    {
+        spdlog::info("this user_name : {} , check pass..", userName);
+    }
+    else
+    {
+        spdlog::error("this user_name : {} , check unpass..", userName);
+    }
+
+    return false;
 }
 
 bool WeChatClient::userInfoCheck(UserInfo user, std::string& checkErrorInfo)
@@ -55,8 +70,8 @@ void WeChatClient::init()
     this->serverPort = cf.value("serverPort").toInt();
 
     this->httpClient = new HttpClient(this->serverHost,this->serverPort);
-    this->httpClient->setReadTimeout(cf.value("readTimeout").toInt());
-    this->httpClient->setWriteTimeout(cf.value("writeTimeout").toInt());
+    //this->httpClient->setReadTimeout(cf.value("readTimeout").toInt());
+    //this->httpClient->setWriteTimeout(cf.value("writeTimeout").toInt());
 }
 
 UserInfo * WeChatClient::findUserHistory(UserInfo & user)

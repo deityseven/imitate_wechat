@@ -137,7 +137,7 @@ MysqlResultSet MysqlClient::query(MysqlQuerySet data)
 	return std::move(result);
 }
 
-bool MysqlClient::updater(MysqlUpdateSet data)
+bool MysqlClient::update(MysqlUpdateSet data)
 {
 	std::string tableName = data.getTableName();
 	std::string setStr = data.buildSetValueString();

@@ -3,6 +3,7 @@
 #include <http/httplib.h>
 #include "handels/server_online.h"
 #include "handels/account_verify.h"
+#include "handels/account_unique_check.h"
 
 HttpServer::HttpServer(std::string serverHost, unsigned int serverPort)
     :server(nullptr), serverHost(serverHost), serverPort(serverPort)
@@ -11,6 +12,7 @@ HttpServer::HttpServer(std::string serverHost, unsigned int serverPort)
 
     this->server->Post("/api/serverOnline", SeverOnLine());
     this->server->Post("/api/accountVerify", AccountVerify());
+    this->server->Post("/api/accountUniqueCheck", AccountUniqueCheck());
 }
 
 HttpServer::~HttpServer()

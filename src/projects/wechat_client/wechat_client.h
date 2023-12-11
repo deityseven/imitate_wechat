@@ -15,6 +15,9 @@ public:
 
     //检查服务器是否在线
     bool checkServerOnline();
+    //注册帐号
+    bool registerAccount(std::string userName, std::string password);
+
     //概述：用户验证
     //参数：user 用户信息
     //参数：checkErrorInfo 如果check失败内容为错误信息
