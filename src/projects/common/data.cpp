@@ -74,6 +74,11 @@ Data::Data(double data)
     this->stringData.swap(std::to_string(data));
 }
 
+Data::Data(int data)
+    :Data(long(data))
+{
+}
+
 Data::Data(long data)
     : Data()
 {

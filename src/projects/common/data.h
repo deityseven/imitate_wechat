@@ -11,6 +11,7 @@ public:
     Data(const char* data);
     Data(std::string data);
     Data(double data);
+    Data(int data);
     Data(long data);
     Data(bool data);
 
