@@ -29,8 +29,6 @@ bool FileUtil::canWrite(const std::string & filePath)
 
 void FileUtil::saveToText(const std::string & fileContent, const std::string & filePath)
 {
-    std::string content;
-
     std::ofstream fs(filePath);
 
     if (fs.is_open()) {
