@@ -1,7 +1,7 @@
 #ifndef CONFIG_FILE_CONTENT_BUILDER_H
 #define CONFIG_FILE_CONTENT_BUILDER_H
 
-#include "type_struct.h"
+#include "../../config_file.h"
 #include <string>
 
 class ConfigFileContentBuilderHandle;
@@ -16,7 +16,8 @@ public:
         return ins;
     }
 
-    std::string buildFileContent(const ConfigData& data, const ConfigFileType& type);
+    std::string buildFileContent(const std::map<std::string, std::map<std::string, Data>>& data, 
+        const ConfigFileType& type);
 
 private:
     ConfigFileContentBuilder();

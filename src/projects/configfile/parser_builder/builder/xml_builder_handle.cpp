@@ -12,7 +12,7 @@ bool XmlBuilderHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Xml;
 }
 
-bool XmlBuilderHandle::handle(const ConfigData & data, std::string & out)
+bool XmlBuilderHandle::handle(const std::map<std::string, std::map<std::string, Data>>& data, std::string & out)
 {
     pugi::xml_document doc;
     auto root = doc.append_child("config");

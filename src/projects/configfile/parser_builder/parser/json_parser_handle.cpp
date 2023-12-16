@@ -10,7 +10,7 @@ bool JsonParserHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Json;
 }
 
-bool JsonParserHandle::handle(const std::string & content, ConfigData & data)
+bool JsonParserHandle::handle(const std::string & content, std::map<std::string, std::map<std::string, Data>>& data)
 {
     std::string fileContent = content;
 

@@ -64,9 +64,9 @@ void ConfigFile::setValue(std::string key, Data data)
     }
 }
 
-StringList ConfigFile::allKeys() const
+std::list<std::string> ConfigFile::allKeys() const
 {
-    StringList list;
+    std::list<std::string> list;
 
     try
     {
@@ -156,7 +156,7 @@ void ConfigFile::parseFile()
     setWritable(isWritable);
     auto fileContent = FileUtil::readAllText(this->filePathData);
     //type
-    this->typeData = FileUtil::fileContentFormat(fileContent);
+    this->typeData = ConfigFile::fileContentFormat(fileContent);
 
     ConfigFileContentParser::instance().parseContent(fileContent, this->typeData, this->data);
 }
@@ -178,4 +178,23 @@ void ConfigFile::setWritable(bool isWritable)
 void ConfigFile::setFormat(ConfigFileType format)
 {
     this->typeData = format;
+}
+
+ConfigFileType ConfigFile::fileContentFormat(const std::string& fileContent)
+{
+    bool hasLeftSquareBrackets = (fileContent.find('[') != std::string::npos);
+    bool hasRightSquareBrackets = (fileContent.find(']') != std::string::npos);
+    bool hasEqualSign = (fileContent.find('=') != std::string::npos);
+    bool hasLeftBrace = (fileContent.find('{') != std::string::npos);
+    bool hasRightBrace = (fileContent.find('}') != std::string::npos);
+    bool hasColon = (fileContent.find(':') != std::string::npos);
+    bool hasLeftAngleBrackets = (fileContent.find('<') != std::string::npos);
+    bool hasRightAngleBrackets = (fileContent.find('>') != std::string::npos);
+    bool hasSlash = (fileContent.find('/') != std::string::npos);
+
+    if (hasSlash && hasLeftAngleBrackets && hasRightAngleBrackets) return ConfigFileType::Xml;
+    if (hasLeftBrace && hasRightBrace && hasColon) return ConfigFileType::Json;
+    if (hasEqualSign || hasRightSquareBrackets || hasLeftSquareBrackets) return ConfigFileType::Ini;
+
+    return ConfigFileType::None;
 }

@@ -13,7 +13,7 @@ bool XmlParserHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Xml;
 }
 
-bool XmlParserHandle::handle(const std::string & content, ConfigData & data)
+bool XmlParserHandle::handle(const std::string & content, std::map<std::string, std::map<std::string, Data>>& data)
 {
     pugi::xml_document doc;
     auto result = doc.load_string(content.c_str());

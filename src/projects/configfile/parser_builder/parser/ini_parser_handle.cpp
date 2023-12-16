@@ -11,13 +11,13 @@ bool IniParserHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Ini;
 }
 
-bool IniParserHandle::handle(const std::string & content, ConfigData & data)
+bool IniParserHandle::handle(const std::string & content, std::map<std::string, std::map<std::string, Data>>& data)
 {
     //在文件内容末尾添加新行方便解析
     //add a newline at the end of the file
     std::string fileData = content + '\n';
 
-    StringList list = StringUtil::split(fileData, '\n');
+    std::list<std::string> list = StringUtil::split(fileData, '\n');
 
     std::string sectionName = "default";
 
@@ -35,7 +35,7 @@ bool IniParserHandle::handle(const std::string & content, ConfigData & data)
         //this line is key and value, parse they save to current sectionName.
         if (line.find('=') != std::string::npos)
         {
-            StringList keyAndValue = StringUtil::split(line, '=');
+            std::list<std::string> keyAndValue = StringUtil::split(line, '=');
             if (keyAndValue.empty()) continue;
 
             auto iter = keyAndValue.begin();

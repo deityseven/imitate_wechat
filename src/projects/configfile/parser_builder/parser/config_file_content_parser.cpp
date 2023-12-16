@@ -8,7 +8,7 @@ ConfigFileContentParser::ConfigFileContentParser()
 {
 }
 
-void ConfigFileContentParser::parseContent(const std::string & fileContent, const ConfigFileType& type, ConfigData& data)
+void ConfigFileContentParser::parseContent(const std::string & fileContent, const ConfigFileType& type, std::map<std::string, std::map<std::string, Data>>& data)
 {
     //handle
     handleHead->execute(fileContent, type, data);

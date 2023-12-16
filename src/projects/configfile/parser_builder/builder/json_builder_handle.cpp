@@ -10,7 +10,7 @@ bool JsonBuilderHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Json;
 }
 
-bool JsonBuilderHandle::handle(const ConfigData & data, std::string & out)
+bool JsonBuilderHandle::handle(const std::map<std::string, std::map<std::string, Data>>& data, std::string & out)
 {
     nlohmann::json root;
 

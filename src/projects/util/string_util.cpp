@@ -1,9 +1,9 @@
 #include "string_util.h"
 #include <algorithm>
 
-StringList StringUtil::split(const std::string src, const char sep)
+std::list<std::string> StringUtil::split(const std::string src, const char sep)
 {
-    StringList content;
+    std::list<std::string> content;
 
     std::string temp;
 
@@ -25,9 +25,9 @@ StringList StringUtil::split(const std::string src, const char sep)
     return std::move(content);
 }
 
-StringList StringUtil::split(const std::string src, const std::string chr)
+std::list<std::string> StringUtil::split(const std::string src, const std::string chr)
 {
-    StringList content;
+    std::list<std::string> content;
 
     size_t chrlen = chr.size();
 

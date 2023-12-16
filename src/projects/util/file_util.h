@@ -20,10 +20,7 @@ public:
     // 参数：fileContent的值为文件内容
     // 参数：filePath的值为文件路径以及文件名
 	static void saveToText(const std::string& fileContent, const std::string& filePath);
-    // 概述：返回配置文件内容的格式
-    // 参数：fileContent的值为文件内容
-    // 返回值：返回配置文件类型
-    static ConfigFileType fileContentFormat(const std::string& fileContent);
+    
 };
 
 #endif // !FILE_UTIL_H

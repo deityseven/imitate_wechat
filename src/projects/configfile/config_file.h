@@ -4,12 +4,25 @@
 #include <string>
 #include <list>
 #include <map>
+#include <data.h>
 
-#include <type_struct.h>
+enum class ConfigFileType
+{
+    None,
+    Ini,
+    Json,
+    Xml
+};
 
 //配置文件抽象
 class ConfigFile
 {
+public:
+    // 概述：返回配置文件内容的格式
+    // 参数：fileContent的值为文件内容
+    // 返回值：返回配置文件类型
+    static ConfigFileType fileContentFormat(const std::string& fileContent);
+
 public:
 
     explicit ConfigFile(std::string filePath);
@@ -26,7 +39,7 @@ public:
     //设置值
     void setValue(std::string key, Data data);
     //返回当前section下所有 key
-    StringList allKeys() const;
+    std::list<std::string> allKeys() const;
     //查询当前section下是否存在key，存在返回true
     bool hasKey(std::string key) const;
     //在当前section下删除key以及对应的值，如果key存在并且删除成功返回true
@@ -54,7 +67,7 @@ private:
 
 private:
     //       section               key          value
-    ConfigData data;
+    std::map<std::string, std::map<std::string, Data>> data;
     //配置文件路径
     std::string filePathData;
     //文件格式

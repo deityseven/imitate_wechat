@@ -11,7 +11,7 @@ bool IniBuilderHandle::canHandle(const ConfigFileType & type)
     return type == ConfigFileType::Ini;
 }
 
-bool IniBuilderHandle::handle(const ConfigData & data, std::string & out)
+bool IniBuilderHandle::handle(const std::map<std::string, std::map<std::string, Data>>& data, std::string & out)
 {
     std::string fileContent;
 

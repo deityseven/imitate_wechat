@@ -7,7 +7,7 @@ ConfigFileContentBuilder::ConfigFileContentBuilder()
 {
 }
 
-std::string ConfigFileContentBuilder::buildFileContent(const ConfigData& data, const ConfigFileType& type)
+std::string ConfigFileContentBuilder::buildFileContent(const std::map<std::string, std::map<std::string, Data>>& data, const ConfigFileType& type)
 {
     std::string content;
     handleHead->execute(content, type, data);

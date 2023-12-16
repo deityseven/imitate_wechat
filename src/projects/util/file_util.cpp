@@ -37,21 +37,3 @@ void FileUtil::saveToText(const std::string & fileContent, const std::string & f
     }
 }
 
-ConfigFileType FileUtil::fileContentFormat(const std::string & fileContent)
-{
-    bool hasLeftSquareBrackets = (fileContent.find('[') != std::string::npos);
-    bool hasRightSquareBrackets = (fileContent.find(']') != std::string::npos);
-    bool hasEqualSign = (fileContent.find('=') != std::string::npos);
-    bool hasLeftBrace = (fileContent.find('{') != std::string::npos);
-    bool hasRightBrace = (fileContent.find('}') != std::string::npos);
-    bool hasColon = (fileContent.find(':') != std::string::npos);
-    bool hasLeftAngleBrackets = (fileContent.find('<') != std::string::npos);
-    bool hasRightAngleBrackets = (fileContent.find('>') != std::string::npos);
-    bool hasSlash = (fileContent.find('/') != std::string::npos);
-
-    if (hasSlash && hasLeftAngleBrackets && hasRightAngleBrackets) return ConfigFileType::Xml;
-    if (hasLeftBrace && hasRightBrace && hasColon) return ConfigFileType::Json;
-    if (hasEqualSign || hasRightSquareBrackets || hasLeftSquareBrackets) return ConfigFileType::Ini;
-
-    return ConfigFileType::None;
-}

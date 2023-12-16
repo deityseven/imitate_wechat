@@ -12,7 +12,7 @@ protected:
     // 通过 ConfigFileContentBuilderHandle 继承
     virtual bool canHandle(const ConfigFileType & type) override;
 
-    virtual bool handle(const ConfigData & data, std::string & out) override;
+    virtual bool handle(const std::map<std::string, std::map<std::string, Data>>& data, std::string & out) override;
 
 };
 
