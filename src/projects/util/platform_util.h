@@ -3,6 +3,7 @@
 
 #include <string>
 #include <platform_define.h>
+#include <list>
 
 //文件相关操作
 class PlatformUtil
@@ -37,6 +38,12 @@ public:
 
     //判断参数是否是文件
     static bool isFile(std::string file);
+
+    //路径标准化
+    static std::string standardPath(std::string file);
+
+    //获取目录下所有文件以及子目录
+    static std::list<std::string> directoryContent(std::string file);
 };
 
 #endif // !PLATFORM_UTIL_H

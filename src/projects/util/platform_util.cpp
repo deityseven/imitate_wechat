@@ -1,6 +1,7 @@
 #include "platform_util.h"
 
 #include <sys/stat.h>
+#include <algorithm>
 
 #ifdef I_OS_WIN
 #include <io.h>
@@ -11,6 +12,8 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <dirent.h>
 #endif // I_OS_LINUX
 
 bool PlatformUtil::access(const char * filename, FileAuthority mode)
@@ -33,7 +36,7 @@ std::string PlatformUtil::fileAbsolutePath(std::string file)
 #ifdef I_OS_WIN
     if (_fullpath(buff, file.c_str(), buffLen) != nullptr)
     {
-        return std::string(buff);
+        return standardPath(std::string(buff));
     }
 #endif // I_OS_WIN
 
@@ -41,7 +44,9 @@ std::string PlatformUtil::fileAbsolutePath(std::string file)
     realpath(file.c_str(), buff);
     if (strlen(buff) > 0)
     {
-        return std::string(buff);
+        std::string result(buff);
+        std::replace(result.begin(), result.end(), '\\', '/');
+        return result;
     }
 #endif // I_OS_LINUX
 
@@ -68,4 +73,66 @@ bool PlatformUtil::isFile(std::string file)
     }
 
     throw std::exception("invalid parameter");
+}
+
+std::string PlatformUtil::standardPath(std::string file)
+{
+    std::replace(file.begin(), file.end(), '\\', '/');
+    if (isDirectory(file))
+    {
+        auto iter = file.rbegin();
+        if ((*iter) != '/')
+        {
+            file.push_back('/');
+        }
+    }
+
+    return std::move(file);
+}
+
+std::list<std::string> PlatformUtil::directoryContent(std::string file)
+{
+    std::list<std::string> result;
+
+    std::string absPath = fileAbsolutePath(file);
+    if (!absPath.empty()) file = absPath;
+
+    if (isDirectory(file))
+    {
+#ifdef I_OS_WIN
+        std::string search = file + "*";
+        struct _finddata_t fileInfo;
+        memset(&fileInfo, 0, sizeof(struct _finddata_t));
+        auto handle = _findfirst(search.c_str(), &fileInfo);
+        if (handle == -1) throw std::exception("invalid parameter");
+        do
+        {
+            if(strcmp(".", fileInfo.name) == 0 || strcmp("..", fileInfo.name) == 0)
+                continue;
+            result.push_back(standardPath(file + fileInfo.name));
+        } while (!_findnext(handle, &fileInfo));
+
+#endif // I_OS_WIN
+
+#ifdef I_OS_LINUX
+        DIR* dir = opendir(file.c_str());
+
+        if (dir != nullptr)
+        {
+            while (dirent* info = readdir(dir))
+            {
+                if (strcmp(".", info->d_name) || strcmp("..", info->d_name)) continue;
+                result.push_back(info->d_name);
+            }
+
+            closedir(dir);
+        }
+#endif // I_OS_LINUX
+    }
+    else
+    {
+        throw std::exception("invalid parameter");
+    }
+
+    return result;
 }
