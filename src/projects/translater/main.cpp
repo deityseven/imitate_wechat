@@ -34,7 +34,7 @@ std::vector<std::string> getAllFiles(std::string dir)
 	return result;
 }
 
-std::string scan(std::vector<std::string> inputFiles)
+std::string scan(const std::vector<std::string>& inputFiles, const std::list<std::string>& targetLanguageList)
 {
 	nlohmann::json root;
 
@@ -61,7 +61,11 @@ std::string scan(std::vector<std::string> inputFiles)
 
 				nlohmann::json keyAndValue;
 				keyAndValue["english"] = key;
-				keyAndValue["chinese"] = value;
+
+				for (auto& targetLanguage : targetLanguageList)
+				{
+					keyAndValue[targetLanguage] = value;
+				}
 
 				root.push_back(keyAndValue);
 			}
@@ -78,9 +82,10 @@ std::string scan(std::vector<std::string> inputFiles)
 int main(int argc, char* argv[])
 {
 	std::string singleFile = getarg("", "-s", "--singlefile");
-	std::string outFile = getarg("./out.ts", "-o", "--out");
-	std::string scanDir = getarg("", "-d", "--dir");
-	std::string typeFile = getarg("cpp", "-t", "--type");
+	std::string out = getarg("./out.ts", "-o", "--out");
+	std::string dir = getarg("", "-d", "--dir");
+	std::string type = getarg("cpp", "-t", "--type");
+	std::string target_language = getarg("chinese", "-l", "--target_language");
 
 	std::vector<std::string> needScanFiles;
 
@@ -89,13 +94,14 @@ int main(int argc, char* argv[])
 		needScanFiles.push_back(singleFile);
 	}
 
-	if (!scanDir.empty())
+	if (!dir.empty())
 	{
-		auto temp = getAllFiles(scanDir);
+		auto temp = getAllFiles(dir);
 		needScanFiles.insert(needScanFiles.begin(), temp.begin(), temp.end());
 	}
 
-	auto typeList = StringUtil::split(typeFile, '/');
+	auto typeList = StringUtil::split(type, '/');
+	auto targetLanguageList = StringUtil::split(target_language, '/');
 
 	std::vector<std::string> inputFile;
 
@@ -111,9 +117,9 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	std::string content = scan(inputFile);
+	std::string content = scan(inputFile, targetLanguageList);
 
-	FileUtil::saveToText(content, outFile);
+	FileUtil::saveToText(content, out);
 
 	return 0;
 }
