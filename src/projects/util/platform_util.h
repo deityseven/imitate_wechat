@@ -28,6 +28,9 @@ public:
     
     //检查filename文件的权限authority是否正常, 正常返回true，否则返回false
     static bool access(const char *filename, FileAuthority authority);
+
+    //返回参数对应的文件绝对路径
+    static std::string fileAbsolutePath(std::string file);
 };
 
 #endif // !PLATFORM_UTIL_H
