@@ -31,6 +31,12 @@ public:
 
     //返回参数对应的文件绝对路径
     static std::string fileAbsolutePath(std::string file);
+
+    //判断参数是否是目录
+    static bool isDirectory(std::string file);
+
+    //判断参数是否是文件
+    static bool isFile(std::string file);
 };
 
 #endif // !PLATFORM_UTIL_H

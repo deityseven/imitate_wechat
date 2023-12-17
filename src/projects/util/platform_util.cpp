@@ -1,5 +1,7 @@
 #include "platform_util.h"
 
+#include <sys/stat.h>
+
 #ifdef I_OS_WIN
 #include <io.h>
 #include <stdlib.h>
@@ -44,4 +46,26 @@ std::string PlatformUtil::fileAbsolutePath(std::string file)
 #endif // I_OS_LINUX
 
     return std::string();
+}
+
+bool PlatformUtil::isDirectory(std::string file)
+{
+    struct stat st;
+    if (stat(file.c_str(), &st) == 0)
+    {
+        return st.st_mode & S_IFDIR;
+    }
+
+    throw std::exception("invalid parameter");
+}
+
+bool PlatformUtil::isFile(std::string file)
+{
+    struct stat st;
+    if (stat(file.c_str(), &st) == 0)
+    {
+        return st.st_mode & S_IFREG;
+    }
+
+    throw std::exception("invalid parameter");
 }
