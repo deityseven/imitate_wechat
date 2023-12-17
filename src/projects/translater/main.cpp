@@ -4,56 +4,116 @@
 #include <json.hpp>
 #include <stdio.h>
 #include <iostream>
+#include <getopt.hpp>
+#include <platform_util.h>
+#include <string_util.h>
+#include <algorithm>
 
-int main(int argc, char* argv[])
+std::vector<std::string> getAllFiles(std::string dir)
 {
-	if (argc != 3) return -1;
+	std::vector<std::string> result;
 
-	nlohmann::json root;
-
-	std::string fileDir(argv[1]);
-	std::string outFile(argv[2]);
-
-	std::string content = FileUtil::readAllText(fileDir);
-
-	for (size_t currentPos = 0; currentPos < content.size(); ++currentPos)
+	if (!dir.empty())
 	{
-		currentPos = content.find("tr(\"", currentPos);
+		auto fileAndDirs = PlatformUtil::directoryContent(dir);
 
-		if (currentPos != std::string::npos)
+		for (auto& item : fileAndDirs)
 		{
-			auto begin = content.begin();
-			auto left = begin + currentPos + 4;
-
-			size_t rightPos = content.find("\")", currentPos);
-
-			auto right = begin + rightPos;
-
-			std::string key(left, right);
-
-			std::string value = "undefine";
-
-			nlohmann::json keyAndValue;
-			keyAndValue["english"] = key;
-			keyAndValue["chinese"] = value;
-
-			root.push_back(keyAndValue);
+			if (PlatformUtil::isFile(item))
+			{
+				result.push_back(item);
+			}
+			else if (PlatformUtil::isDirectory(item))
+			{
+				std::vector<std::string> temp = getAllFiles(item);
+				result.insert(result.begin(), temp.begin(), temp.end());
+			}
 		}
 	}
 
-	FileUtil::saveToText(root.dump(), outFile);
+	return result;
+}
 
-	return 0;
+std::string scan(std::vector<std::string> inputFiles)
+{
+	nlohmann::json root;
 
-	size_t pos = content.find("tr(") + 4;
-	size_t pos2 = content.find("\")");
-	std::string str;
-	while (pos != pos2)
+	for (const auto& item : inputFiles)
 	{
-		str.push_back(content[pos]);
-		++pos;
+		std::string content = FileUtil::readAllText(item);
+
+		for (size_t currentPos = 0; currentPos < content.size(); ++currentPos)
+		{
+			currentPos = content.find("tr(\"", currentPos);
+
+			if (currentPos != std::string::npos)
+			{
+				auto begin = content.begin();
+				auto left = begin + currentPos + 4;
+
+				size_t rightPos = content.find("\")", currentPos);
+
+				auto right = begin + rightPos;
+
+				std::string key(left, right);
+
+				std::string value = "undefine";
+
+				nlohmann::json keyAndValue;
+				keyAndValue["english"] = key;
+				keyAndValue["chinese"] = value;
+
+				root.push_back(keyAndValue);
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
-	FileUtil::saveToText(str, "D:/GithubProject/imitate_wechat/configs/EN_to_CN.ts");
+
+	return root.dump(0);
+}
+
+int main(int argc, char* argv[])
+{
+	std::string singleFile = getarg("", "-s", "--singlefile");
+	std::string outFile = getarg("./out.ts", "-o", "--out");
+	std::string scanDir = getarg("", "-d", "--dir");
+	std::string typeFile = getarg("cpp", "-t", "--type");
+
+	std::vector<std::string> needScanFiles;
+
+	if (!singleFile.empty())
+	{
+		needScanFiles.push_back(singleFile);
+	}
+
+	if (!scanDir.empty())
+	{
+		auto temp = getAllFiles(scanDir);
+		needScanFiles.insert(needScanFiles.begin(), temp.begin(), temp.end());
+	}
+
+	auto typeList = StringUtil::split(typeFile, '/');
+
+	std::vector<std::string> inputFile;
+
+	for (auto item : needScanFiles)
+	{
+		for (auto type : typeList)
+		{
+			if (item.find(type) != std::string::npos)
+			{
+				inputFile.push_back(item);
+				break;
+			}
+		}
+	}
+
+	std::string content = scan(inputFile);
+
+	FileUtil::saveToText(content, outFile);
 
 	return 0;
 }

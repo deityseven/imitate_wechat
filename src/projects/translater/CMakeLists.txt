@@ -19,6 +19,7 @@ source_group(main FILES ${MAIN_SRC})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/external/spdlog/include
+					${CMAKE_SOURCE_DIR}/external/getopt
 					${CMAKE_SOURCE_DIR}/external/json
 					${CMAKE_SOURCE_DIR}/src/projects
 					${CMAKE_SOURCE_DIR}/src/projects/common

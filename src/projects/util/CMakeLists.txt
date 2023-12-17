@@ -46,6 +46,7 @@ source_group(file FILES ${FILE_SRC})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
 					${CMAKE_SOURCE_DIR}/external
 					${CMAKE_SOURCE_DIR}/src/projects/common
+					E:\QT_Project\GenerateSystem\src\GenerateSystem
 )
 
 #库目录
