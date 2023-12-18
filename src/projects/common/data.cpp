@@ -125,5 +125,5 @@ long Data::toLong() const
 
 bool Data::toBool() const
 {
-    return boolData;
+    return this->boolData;
 }
