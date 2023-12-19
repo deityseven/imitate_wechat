@@ -122,7 +122,7 @@ std::list<std::string> PlatformUtil::directoryContent(std::string file)
             while (dirent* info = readdir(dir))
             {
                 if (strcmp(".", info->d_name) == 0 || strcmp("..", info->d_name) == 0)
-                result.push_back(standardPath(file + fileInfo.name));
+                    result.push_back(standardPath(file + fileInfo.name));
             }
 
             closedir(dir);

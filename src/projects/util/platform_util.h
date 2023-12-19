@@ -20,11 +20,11 @@ public:
         //可写入
         can_write = 2,
         //可读取
-        cam_read = 4
+        can_read = 4
 #ifdef I_OS_WIN
         //可执行权限
         ,can_write_read = 6
-#endif // I_OS_LINUX
+#endif // I_OS_WIN
     };
     
     //检查filename文件的权限authority是否正常, 正常返回true，否则返回false
