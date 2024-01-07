@@ -1,11 +1,13 @@
 #include "platform_util.h"
 
+#include <platform_define.h>
 #include <sys/stat.h>
 #include <algorithm>
 
 #ifdef I_OS_WIN
 #include <io.h>
 #include <stdlib.h>
+#include <Windows.h>
 #endif // I_OS_WIN
 
 #ifdef I_OS_LINUX
@@ -135,4 +137,43 @@ std::list<std::string> PlatformUtil::directoryContent(std::string file)
     }
 
     return result;
+}
+
+std::list<std::string> PlatformUtil::compactDiscList()
+{
+    std::list<std::string> result;
+
+#ifdef I_OS_WIN
+    std::list<std::string> temp;
+
+    // 存放所有驱动器字母的数组
+    char drivers[256];
+    memset(drivers, 0, sizeof(sizeof(drivers)));
+
+    DWORD flag = GetLogicalDriveStringsA(sizeof(drivers), drivers);
+    if (flag != 0)
+    {
+        const char* driver = drivers;
+
+        while (strlen(driver) != 0)
+        {
+            UINT type = GetDriveTypeA(driver);
+            if (type == DRIVE_CDROM)
+            {
+                result.emplace_back(driver);
+            }
+            
+            driver += (strlen(driver) + 1);
+        }
+    }
+
+#endif // I_OS_WIN
+
+#ifdef I_OS_LINUX
+
+#endif // I_OS_LINUX
+
+
+
+    return std::move(result);
 }
